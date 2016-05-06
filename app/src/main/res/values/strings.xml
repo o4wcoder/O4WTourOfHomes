@@ -4,5 +4,11 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <!--Navigation Drawer -->
+    <string name="nav_homes">Homes</string>
+    <string name="nav_map">Map</string>
+    <string name="nav_tickets">Tickets</string>
+    <string name="nav_contact">Contact</string>
+
     <string name="action_settings">Settings</string>
 </resources>
