@@ -22,13 +22,15 @@
             -->
         <item
             android:id="@+id/nav_homes"
+            android:icon="@drawable/ic_action_home"
             android:title="@string/nav_homes" />
         <item
             android:id="@+id/nav_map"
-            android:icon="@drawable/ic_menu_map"
+            android:icon="@drawable/ic_map_map"
             android:title="@string/nav_map" />
         <item
             android:id="@+id/nav_tickets"
+            android:icon="@drawable/two_tickets_icon"
             android:title="@string/nav_tickets" />
     </group>
 
@@ -36,6 +38,7 @@
         <menu>
             <item
                 android:id="@+id/nav_contact"
+                android:icon="@drawable/ic_contacts"
                 android:title="@string/nav_contact"/>
             <!--
             <item
