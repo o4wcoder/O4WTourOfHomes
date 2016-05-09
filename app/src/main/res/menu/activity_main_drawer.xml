@@ -2,28 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <!--
+
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
-            -->
-        <item
-            android:id="@+id/nav_homes"
+            android:id="@+id/nav_home"
             android:icon="@drawable/ic_action_home"
-            android:title="@string/nav_homes" />
+            android:title="@string/nav_home" />
+        <item
+            android:id="@+id/nav_featured_homes"
+            android:icon="@drawable/ic_view_module_homes"
+            android:title="@string/nav_featured_homes" />
         <item
             android:id="@+id/nav_map"
             android:icon="@drawable/ic_map_map"
@@ -38,7 +25,7 @@
         <menu>
             <item
                 android:id="@+id/nav_contact"
-                android:icon="@drawable/ic_contacts"
+                android:icon="@drawable/ic_contacts_icon"
                 android:title="@string/nav_contact"/>
             <!--
             <item
