@@ -31,6 +31,7 @@ public class HomeMapActivity extends AppCompatActivity implements Constants{
 
         mZoomLocation = intent.getParcelableExtra(EXTRA_LOCATION);
 
+
         if(mZoomLocation != null) {
 
             Log.e(TAG,"Got location = " + mZoomLocation.toString());

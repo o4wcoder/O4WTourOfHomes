@@ -3,41 +3,52 @@ package com.fourthwardmobile.o4wtourofhomes.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.fourthwardmobile.o4wtourofhomes.R;
+import com.fourthwardmobile.o4wtourofhomes.helpers.Util;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MapFragment.OnFragmentInteractionListener} interface
+ * {@link MapHomeFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link MapFragment#newInstance} factory method to
+ * Use the {@link MapHomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapFragment extends Fragment {
+public class MapHomeFragment extends Fragment implements OnMapReadyCallback {
 
     /**************************************************************************/
     /*                             Constants                                  */
     /**************************************************************************/
-    private static final String TAG = MapFragment.class.getSimpleName();
+    private static final String TAG = MapHomeFragment.class.getSimpleName();
 
     private static final String ARG_LOCATION = "param1";
 
     /**************************************************************************/
     /*                            Local Data                                  */
     /**************************************************************************/
-    private String mZoomLocation;
+    private LatLng mZoomLocation;
+    private GoogleMap mGoogleMap;
+    private MapView mMapView;
 
 
    // private OnFragmentInteractionListener mListener;
 
-    public MapFragment() {
+    public MapHomeFragment() {
         // Required empty public constructor
     }
 
@@ -47,11 +58,11 @@ public class MapFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment MapFragment.
+     * @return A new instance of fragment MapHomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MapFragment newInstance(LatLng latLng) {
-        MapFragment fragment = new MapFragment();
+    public static MapHomeFragment newInstance(LatLng latLng) {
+        MapHomeFragment fragment = new MapHomeFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_LOCATION, latLng);
         fragment.setArguments(args);
@@ -62,18 +73,72 @@ public class MapFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            Log.e(TAG,"onCreate. Getting argument location");
             mZoomLocation = getArguments().getParcelable(ARG_LOCATION);
 
         }
+        else {
+            Log.e(TAG,"onCreate. Getting o4w park location");
+            mZoomLocation = Util.getFourthWardParkLocation();
+        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_map, container, false);
+        View view = inflater.inflate(R.layout.fragment_home_map, container, false);
+
+        mMapView = (MapView)view.findViewById(R.id.map);
+        mMapView.onCreate(savedInstanceState);
+
+        mMapView.getMapAsync(this);
 
         return view;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mMapView.onLowMemory();
+    }
+
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+        mGoogleMap = googleMap;
+
+        //Zoom to location
+        if(mGoogleMap != null) {
+            mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mZoomLocation, 16));
+
+            MarkerOptions options = new MarkerOptions()
+                    .position(mZoomLocation)
+                    .title(getString(R.string.marker_buy_tickets));
+            mGoogleMap.addMarker(options);
+        }
     }
 
 //    // TODO: Rename method, update argument and hook method into UI event
@@ -115,23 +180,26 @@ public class MapFragment extends Fragment {
 //        void onFragmentInteraction(Uri uri);
 //    }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.e(TAG,"onDestroyView()");
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//        Log.e(TAG,"onDestroyView()");
+//
+//        /**
+//         * Remove child Map Framgment when we leave the parent fragment. If not,
+//         * it will crash when we return.
+//         */
+//        android.app.Fragment fragment = getActivity().getFragmentManager()
+//                .findFragmentById(R.id.map);
+//        if (null != fragment) {
+//            Log.e(TAG,"onDestroyView() remove map fragment");
+//            android.app.FragmentTransaction ft = getActivity()
+//                    .getFragmentManager().beginTransaction();
+//            ft.remove(fragment);
+//            ft.commit();
+//        }
+//    }
 
-        /**
-         * Remove child Map Framgment when we leave the parent fragment. If not,
-         * it will crash when we return.
-         */
-        android.app.Fragment fragment = getActivity().getFragmentManager()
-                .findFragmentById(R.id.map);
-        if (null != fragment) {
-            Log.e(TAG,"onDestroyView() remove map fragment");
-            android.app.FragmentTransaction ft = getActivity()
-                    .getFragmentManager().beginTransaction();
-            ft.remove(fragment);
-            ft.commit();
-        }
-    }
+
+
 }

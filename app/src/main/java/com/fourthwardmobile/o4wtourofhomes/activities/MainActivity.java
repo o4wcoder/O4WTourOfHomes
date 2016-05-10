@@ -1,14 +1,8 @@
 package com.fourthwardmobile.o4wtourofhomes.activities;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -21,13 +15,9 @@ import android.widget.ImageView;
 
 import com.fourthwardmobile.o4wtourofhomes.R;
 import com.fourthwardmobile.o4wtourofhomes.fragments.HomeFragment;
-import com.fourthwardmobile.o4wtourofhomes.fragments.MapFragment;
-import com.fourthwardmobile.o4wtourofhomes.interfaces.Constants;
-import com.google.android.gms.common.ConnectionResult;
+import com.fourthwardmobile.o4wtourofhomes.fragments.MapHomeFragment;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
-import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -44,8 +34,7 @@ public class MainActivity extends AppCompatActivity
     private GoogleApiClient mGoogleApiClient;
     private LatLng mFourthWardParkLocation;
 
-    private double mTicketLatitude = 33.767840;
-    private double mTicketLongitude = -84.365081;
+
 
     private ImageView mTicketImageView;
 
@@ -121,7 +110,7 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.nav_featured_homes) {
 
         } else if (id == R.id.nav_map) {
-            fragment = MapFragment.newInstance(null);
+            fragment = new MapHomeFragment();
 
         } else if (id == R.id.nav_tickets) {
 

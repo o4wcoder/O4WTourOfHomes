@@ -15,6 +15,7 @@ import android.widget.ImageView;
 
 import com.fourthwardmobile.o4wtourofhomes.R;
 import com.fourthwardmobile.o4wtourofhomes.activities.HomeMapActivity;
+import com.fourthwardmobile.o4wtourofhomes.helpers.Util;
 import com.fourthwardmobile.o4wtourofhomes.interfaces.Constants;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -58,10 +59,6 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
     /*                                     Local Data                                         */
     /******************************************************************************************/
     private GoogleApiClient mGoogleApiClient;
-    private LatLng mFourthWardParkLocation;
-
-    private double mTicketLatitude = 33.767840;
-    private double mTicketLongitude = -84.365081;
 
     private ImageView mTicketImageView;
     // TODO: Rename and change types of parameters
@@ -116,7 +113,6 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         Log.e(TAG,"onCreateView()");
-        mFourthWardParkLocation = new LatLng(mTicketLatitude,mTicketLongitude);
 
         mTicketImageView = (ImageView)view.findViewById(R.id.ticket_location_image_view);
         mTicketImageView.setOnClickListener(new View.OnClickListener() {
@@ -193,7 +189,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
 
         if(mGoogleApiClient != null)
             if(mTicketImageView != null)
-                Picasso.with(getContext()).load(getThumbnailUri(mFourthWardParkLocation))
+                Picasso.with(getContext()).load(getThumbnailUri(Util.getFourthWardParkLocation()))
                         .into(mTicketImageView);
     }
 
@@ -234,4 +230,6 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
         return mapsUri;
 
     }
+
+
 }
