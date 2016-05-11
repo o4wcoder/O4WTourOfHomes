@@ -1,12 +1,15 @@
 package com.fourthwardmobile.o4wtourofhomes.models;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by Chris Hare on 5/7/2016.
  */
-public class Home {
+public class Home implements Parcelable {
 
     private String address;
     private String owners;
@@ -15,12 +18,12 @@ public class Home {
     private String section;
     private String description;
     private String imageUrl;
-    private LatLng location;
+    private String latitude;
+    private String longitude;
 
     public Home() {
 
     }
-
     public String getAddress() {
         return address;
     }
@@ -78,10 +81,65 @@ public class Home {
     }
 
     public LatLng getLocation() {
-        return location;
+        return new LatLng(Double.valueOf(latitude),Double.valueOf(longitude));
     }
 
-    public void setLocation(LatLng location) {
-        this.location = location;
+    public String getLatitude() {
+        return latitude;
     }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    protected Home(Parcel in) {
+        address = in.readString();
+        owners = in.readString();
+        homeType = in.readString();
+        yearBuilt = in.readString();
+        section = in.readString();
+        description = in.readString();
+        imageUrl = in.readString();
+        latitude = in.readString();
+        longitude = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(address);
+        dest.writeString(owners);
+        dest.writeString(homeType);
+        dest.writeString(yearBuilt);
+        dest.writeString(section);
+        dest.writeString(description);
+        dest.writeString(imageUrl);
+        dest.writeString(latitude);
+        dest.writeString(longitude);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Home> CREATOR = new Parcelable.Creator<Home>() {
+        @Override
+        public Home createFromParcel(Parcel in) {
+            return new Home(in);
+        }
+
+        @Override
+        public Home[] newArray(int size) {
+            return new Home[size];
+        }
+    };
 }

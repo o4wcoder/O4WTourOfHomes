@@ -36,7 +36,7 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback {
     /**************************************************************************/
     private static final String TAG = MapHomeFragment.class.getSimpleName();
 
-    private static final String ARG_LOCATION = "param1";
+    private static final String ARG_LOCATION = "location";
 
     /**************************************************************************/
     /*                            Local Data                                  */

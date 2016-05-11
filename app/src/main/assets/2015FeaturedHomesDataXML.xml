@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<data-set xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<home>
+		<address>416 Glen Iris Dr. NE</address>
+		<owner>Shannon Makaila</owner>
+		<hometype>Modern</hometype>
+		<year>2013</year>
+		<section>Fourth Ward Alliance</section>
+		<latitude>33.765837</latitude>
+		<longitude>-84.3689577</longitude>
+		<image>test.img</image>
+	</home>
+	<home>
+		<address>285 Alaska Ave. NE</address>
+		<owner>Elizabeth Warren</owner>
+		<hometype>Traditional</hometype>
+		<year>1930</year>
+		<section>Fourth Ward Neighbors</section>
+		<latitude>33.7621619</latitude>
+		<longitude>-84.3637605</longitude>
+		<image>test.img</image>
+	</home>
+	<home>
+		<address>608 McGruder St. NE</address>
+		<owner>Joel Ferguson</owner>
+		<hometype>Modern</hometype>
+		<year>2014</year>
+		<section>Fourth Ward Neighbors</section>
+		<latitude>33.7586932</latitude>
+		<longitude>-84.3696871</longitude>
+		<image>test.img</image>
+	</home>
+	<home>
+		<address>440 Gartrell St. SE</address>
+		<owner>Glen Donaldson</owner>
+		<hometype>Moden</hometype>
+		<year>2007</year>
+		<section>Fourth &amp; SAND</section>
+		<latitude>33.7531</latitude>
+		<longitude>-84.375308</longitude>
+		<image>test.img</image>
+	</home>
+	<home>
+		<address>637 John Wesley Dobbs Ave. NE</address>
+		<owner>Ralph Engleburger</owner>
+		<hometype>Traditional</hometype>
+		<year>2006</year>
+		<section>Fourth Ward Neighbors</section>
+		<latitude>33.759229</latitude>
+		<longitude>-84.368595</longitude>
+		<image>test.img</image>
+	</home>
+	<home>
+		<address>148 Howell St</address>
+		<owner>Billy Huengling</owner>
+		<hometype>Traditional</hometype>
+		<year>1997</year>
+		<section>Fourth Ward Neighbors</section>
+		<latitude>33.7583052</latitude>
+		<longitude>-84.3723901</longitude>
+		<image>test.img</image>
+	</home>
+	<home>
+		<address>Bedford Pine Apt</address>
+		<owner>N/A</owner>
+		<hometype>Apartment</hometype>
+		<year>1920</year>
+		<section>Fourth Ward West</section>
+		<latitude>33.767787</latitude>
+		<longitude>-84.3744584</longitude>
+		<image>test.img</image>
+	</home>
+	<home>
+		<address>571 Rankin St. NE</address>
+		<owner>Mia McDonough</owner>
+		<hometype>Traditional</hometype>
+		<year>1920</year>
+		<section>Fourth Ward Alliance</section>
+		<latitude>33.766948</latitude>
+		<longitude>-84.370605</longitude>
+		<image>test.img</image>
+	</home>
+</data-set>

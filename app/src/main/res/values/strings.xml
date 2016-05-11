@@ -22,5 +22,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Homes Map -->
-    <string name="marker_buy_tickets"></string>
+    <string name="marker_buy_tickets">Buy Tickets</string>
 </resources>
