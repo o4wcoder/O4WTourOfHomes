@@ -2,9 +2,12 @@ package com.fourthwardmobile.o4wtourofhomes.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.fourthwardmobile.o4wtourofhomes.R;
 import com.fourthwardmobile.o4wtourofhomes.models.Home;
 
 import java.util.ArrayList;
@@ -25,7 +28,10 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+
+        View view = LayoutInflater.from(mContext).inflate(R.layout.home_list_item,parent,false);
+        final ViewHolder vh = new ViewHolder(view);
+        return vh;
     }
 
     @Override
@@ -35,13 +41,17 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mHomeList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
+        public ImageView thumbnailImageView;
+
         public ViewHolder(View view) {
             super(view);
+
+            thumbnailImageView = (ImageView)view.findViewById(R.id.home_thumbnail_image_view);
         }
 
     }
