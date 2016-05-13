@@ -119,9 +119,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
             @Override
             public void onClick(View v) {
 
-//                Intent intent = new Intent(getApplicationContext(),HomeMapActivity.class);
-//                intent.putExtra(EXTRA_LOCATION,mFourthWardParkLocation);
-//                startActivity(intent);
+                ((OnFragmentCallback)getActivity()).onSetMapFragment();
             }
         });
 
@@ -220,10 +218,10 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
     /*******************************************************************/
 	/*                        Callback Interface                       */
     /*******************************************************************/
-//    public interface OnHomeFragmentCallback() {
-//
-//        void onSet
-//    }
+    public interface OnFragmentCallback {
+
+        void onSetMapFragment();
+    }
 
 
 }

@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Constants{
+        implements NavigationView.OnNavigationItemSelectedListener, Constants, HomeFragment.OnFragmentCallback{
 
     /******************************************************************************************/
     /*                                     Constants                                          */
@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity
     /******************************************************************************************/
     private GoogleApiClient mGoogleApiClient;
     private LatLng mFourthWardParkLocation;
+    NavigationView mNavigationView;
 
     private ArrayList<Home> mHomeList = null;
 
@@ -82,16 +83,19 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mNavigationView.setNavigationItemSelectedListener(this);
 
         Log.e(TAG,"onCreate() Load Home Data");
-        new MapDataTask().execute();
+        new LoadDataTask().execute();
 
         //Start with Home Fragment
         HomeFragment firstFragment = new HomeFragment();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container,firstFragment).commit();
+
+        //Select Home menu on Navigation Drawer
+        mNavigationView.setCheckedItem(R.id.nav_home);
 
 
 
@@ -101,6 +105,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -153,17 +158,21 @@ public class MainActivity extends AppCompatActivity
 
         }
 
+        updateFragment(fragment);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void updateFragment(Fragment fragment) {
         if(fragment != null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.addToBackStack(null);
             transaction.replace(R.id.fragment_container,fragment);
             transaction.commit();
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 
+    }
     private ArrayList<Home> loadHomeData() {
 
         //String strXml = null;
@@ -274,8 +283,16 @@ public class MainActivity extends AppCompatActivity
         return homeList;
     }
 
+    @Override
+    public void onSetMapFragment() {
+        updateFragment(MapHomeFragment.newInstance(mHomeList, Util.getFourthWardParkLocation()));
 
-    private class MapDataTask extends AsyncTask<Void, Void, ArrayList<Home>> {
+        //Update Navigation Drawer to select the Map Menu
+        mNavigationView.setCheckedItem(R.id.nav_map);
+    }
+
+
+    private class LoadDataTask extends AsyncTask<Void, Void, ArrayList<Home>> {
 
         protected ArrayList<Home> doInBackground(Void... params) {
 
