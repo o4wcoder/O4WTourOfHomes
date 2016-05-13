@@ -23,4 +23,7 @@
 
     <!-- Homes Map -->
     <string name="marker_buy_tickets">Buy Tickets</string>
+
+    <!-- Error Messages -->
+    <string name="no_network">No Network Connection Available. Maps will be disabled.</string>
 </resources>

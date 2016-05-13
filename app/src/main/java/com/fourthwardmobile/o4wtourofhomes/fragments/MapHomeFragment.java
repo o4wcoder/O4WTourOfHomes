@@ -1,5 +1,7 @@
 package com.fourthwardmobile.o4wtourofhomes.fragments;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.fourthwardmobile.o4wtourofhomes.R;
 import com.fourthwardmobile.o4wtourofhomes.helpers.Util;
+import com.fourthwardmobile.o4wtourofhomes.models.Home;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,8 +21,14 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,12 +45,14 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback {
     /**************************************************************************/
     private static final String TAG = MapHomeFragment.class.getSimpleName();
 
+    private static final String ARG_HOME_LIST = "home_list";
     private static final String ARG_LOCATION = "location";
 
     /**************************************************************************/
     /*                            Local Data                                  */
     /**************************************************************************/
     private LatLng mZoomLocation;
+    private ArrayList<Home> mHomeList;
     private GoogleMap mGoogleMap;
     private MapView mMapView;
 
@@ -61,10 +72,11 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback {
      * @return A new instance of fragment MapHomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MapHomeFragment newInstance(LatLng latLng) {
+    public static MapHomeFragment newInstance(ArrayList<Home> homeList, LatLng zoomLocation) {
         MapHomeFragment fragment = new MapHomeFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_LOCATION, latLng);
+        args.putParcelableArrayList(ARG_HOME_LIST,homeList);
+        args.putParcelable(ARG_LOCATION, zoomLocation);
         fragment.setArguments(args);
         return fragment;
     }
@@ -75,11 +87,8 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback {
         if (getArguments() != null) {
             Log.e(TAG,"onCreate. Getting argument location");
             mZoomLocation = getArguments().getParcelable(ARG_LOCATION);
+            mHomeList = getArguments().getParcelableArrayList(ARG_HOME_LIST);
 
-        }
-        else {
-            Log.e(TAG,"onCreate. Getting o4w park location");
-            mZoomLocation = Util.getFourthWardParkLocation();
         }
 
     }
@@ -132,13 +141,36 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback {
         //Zoom to location
         if(mGoogleMap != null) {
             mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mZoomLocation, 16));
 
+
+            for(int i = 0; i < mHomeList.size(); i++) {
+
+               addMarker(mHomeList.get(i));
+            }
+
+            //Add Fourth Ward Park Market
             MarkerOptions options = new MarkerOptions()
-                    .position(mZoomLocation)
+                    .position(Util.getFourthWardParkLocation())
                     .title(getString(R.string.marker_buy_tickets));
             mGoogleMap.addMarker(options);
+
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mZoomLocation,15));
+
         }
+    }
+
+    private void addMarker(Home home) {
+
+        if(home.getLocation() != null) {
+            MarkerOptions options = new MarkerOptions()
+                    .position(home.getLocation())
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                    .title(home.getName());
+
+            mGoogleMap.addMarker(options);
+        }
+
+
     }
 
 //    // TODO: Rename method, update argument and hook method into UI event

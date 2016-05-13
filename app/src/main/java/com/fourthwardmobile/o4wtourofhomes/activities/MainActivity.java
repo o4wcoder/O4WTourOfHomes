@@ -1,6 +1,9 @@
 package com.fourthwardmobile.o4wtourofhomes.activities;
 
 import android.content.res.AssetManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -20,6 +23,7 @@ import com.fourthwardmobile.o4wtourofhomes.R;
 import com.fourthwardmobile.o4wtourofhomes.fragments.FeaturedHomeListFragment;
 import com.fourthwardmobile.o4wtourofhomes.fragments.HomeFragment;
 import com.fourthwardmobile.o4wtourofhomes.fragments.MapHomeFragment;
+import com.fourthwardmobile.o4wtourofhomes.helpers.Util;
 import com.fourthwardmobile.o4wtourofhomes.interfaces.Constants;
 import com.fourthwardmobile.o4wtourofhomes.models.Home;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -32,6 +36,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Constants{
@@ -43,13 +48,12 @@ public class MainActivity extends AppCompatActivity
 
     //XML Data Tags
     private static final String XML_TAG_HOME = "home";
+    private static final String XML_TAG_NAME = "name";
     private static final String XML_TAG_ADDRESS = "address";
     private static final String XML_TAG_OWNER = "owner";
     private static final String XML_TAG_HOME_TYPE = "hometype";
     private static final String XML_TAG_YEAR = "year";
     private static final String XML_TAG_SECTION = "section";
-    private static final String XML_TAG_LATITUDE = "latitude";
-    private static final String XML_TAG_LONGITUDE = "longitude";
     private static final String XML_TAG_IMAGE = "image";
 
     /******************************************************************************************/
@@ -82,7 +86,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         Log.e(TAG,"onCreate() Load Home Data");
-        loadHomeData();
+        new MapDataTask().execute();
 
         //Start with Home Fragment
         HomeFragment firstFragment = new HomeFragment();
@@ -141,7 +145,7 @@ public class MainActivity extends AppCompatActivity
             fragment = FeaturedHomeListFragment.newInstance(mHomeList);
 
         } else if (id == R.id.nav_map) {
-            fragment = new MapHomeFragment();
+            fragment = MapHomeFragment.newInstance(mHomeList, Util.getFourthWardParkLocation());
 
         } else if (id == R.id.nav_tickets) {
 
@@ -160,7 +164,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void loadHomeData() {
+    private ArrayList<Home> loadHomeData() {
 
         //String strXml = null;
         Log.e(TAG,"loadHomeData() Inside");
@@ -174,33 +178,28 @@ public class MainActivity extends AppCompatActivity
 
             InputStream inputStream = getAssets().open(FILE_HOMES_DATA);
 
-//            int length = inputStream.available();
-//            Log.e(TAG, "Got length of file = " + length);
-//            byte[] data = new byte[length];
-//            inputStream.read(data);
-//            inputStream.close();
-//            String strXml = new String(data);
-
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             //Set Input stream to the XML file as the source for the parser
             parser.setInput(inputStream,null);
 
-            parseXML(parser);
+            return parseXML(parser);
 
         } catch (XmlPullParserException e) {
+            return null;
 
         } catch (IOException e) {
             Log.e(TAG,"Exception loading XML data file. " + e.getMessage());
+            return null;
         }
     }
 
-    private void parseXML(XmlPullParser parser) throws XmlPullParserException, IOException {
-
+    private ArrayList<Home> parseXML(XmlPullParser parser) throws XmlPullParserException, IOException {
 
 
         int eventType = parser.getEventType();
 
         Home currentHome = null;
+        ArrayList<Home> homeList = null;
 
         //Got through each line of XML till the end
         while(eventType != XmlPullParser.END_DOCUMENT) {
@@ -208,7 +207,7 @@ public class MainActivity extends AppCompatActivity
 
             switch(eventType) {
                 case XmlPullParser.START_DOCUMENT:
-                    mHomeList = new ArrayList<>();
+                    homeList = new ArrayList<>();
 
                     break;
                 case XmlPullParser.START_TAG:
@@ -220,8 +219,32 @@ public class MainActivity extends AppCompatActivity
                     }
                     else if (currentHome != null) {
 
+                        if(name.equalsIgnoreCase(XML_TAG_NAME)) {
+                            currentHome.setName(parser.nextText());
+                        }
                         if(name.equalsIgnoreCase(XML_TAG_ADDRESS)) {
                             currentHome.setAddress(parser.nextText());
+
+                            try {
+
+                                if(Util.isNetworkAvailable(this)) {
+                                    List<Address> addresses;
+                                    Geocoder mGeocoder = new Geocoder(getApplicationContext());
+                                    addresses = mGeocoder.getFromLocationName(currentHome.getAddress(), 1);
+
+                                    if (addresses.size() > 0) {
+                                        currentHome.setLocation(new LatLng(addresses.get(0).getLatitude(),
+                                                addresses.get(0).getLongitude()));
+                                    } else
+                                        Log.e(TAG, "Did not get any return from geocoder for street address = " + currentHome.getAddress());
+                                }
+                                else {
+                                    Toast.makeText(this,getString(R.string.no_network),Toast.LENGTH_LONG).show();
+                                }
+                            }
+                            catch (IOException e) {
+                                Log.e(TAG,"Got exception with goecoder " + e.getMessage());
+                            }
                         }
                         else if(name.equalsIgnoreCase(XML_TAG_OWNER)) {
                             currentHome.setOwners(parser.nextText());
@@ -235,25 +258,36 @@ public class MainActivity extends AppCompatActivity
                         else if(name.equalsIgnoreCase(XML_TAG_SECTION)) {
                             currentHome.setSection(parser.nextText());
                         }
-                        else if(name.equalsIgnoreCase(XML_TAG_LATITUDE)) {
-                            currentHome.setLatitude(parser.nextText());
-                        }
-                        else if(name.equalsIgnoreCase(XML_TAG_LONGITUDE)) {
-                            currentHome.setLongitude(parser.nextText());
-                        }
                     }
                     break;
                 case XmlPullParser.END_TAG:
                     name = parser.getName();
                     if(name.equalsIgnoreCase(XML_TAG_HOME) && currentHome != null) {
-                        mHomeList.add(currentHome);
+                        homeList.add(currentHome);
                     }
             }
             eventType = parser.next();
         }
 
-        Log.e(TAG,"End parsing XML, got number of homes = " + mHomeList.size());
+        Log.e(TAG,"End parsing XML, got number of homes = " + homeList.size());
+
+        return homeList;
     }
 
 
+    private class MapDataTask extends AsyncTask<Void, Void, ArrayList<Home>> {
+
+        protected ArrayList<Home> doInBackground(Void... params) {
+
+            return loadHomeData();
+
+        }
+
+        protected void onPostExecute(ArrayList<Home> homeList) {
+
+            mHomeList = homeList;
+
+            Log.e(TAG,"Finished AsynTask with home list size = " + mHomeList.size());
+        }
+    }
 }

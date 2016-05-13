@@ -11,6 +11,7 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class Home implements Parcelable {
 
+    private String name;
     private String address;
     private String owners;
     private String homeType;
@@ -18,12 +19,20 @@ public class Home implements Parcelable {
     private String section;
     private String description;
     private String imageUrl;
-    private String latitude;
-    private String longitude;
+    private LatLng location;
 
     public Home() {
 
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -81,26 +90,15 @@ public class Home implements Parcelable {
     }
 
     public LatLng getLocation() {
-        return new LatLng(Double.valueOf(latitude),Double.valueOf(longitude));
+        return location;
     }
 
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
+    public void setLocation(LatLng location) {
+        this.location = location;
     }
 
     protected Home(Parcel in) {
+        name = in.readString();
         address = in.readString();
         owners = in.readString();
         homeType = in.readString();
@@ -108,8 +106,7 @@ public class Home implements Parcelable {
         section = in.readString();
         description = in.readString();
         imageUrl = in.readString();
-        latitude = in.readString();
-        longitude = in.readString();
+        location = (LatLng) in.readValue(LatLng.class.getClassLoader());
     }
 
     @Override
@@ -119,6 +116,7 @@ public class Home implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
         dest.writeString(address);
         dest.writeString(owners);
         dest.writeString(homeType);
@@ -126,8 +124,7 @@ public class Home implements Parcelable {
         dest.writeString(section);
         dest.writeString(description);
         dest.writeString(imageUrl);
-        dest.writeString(latitude);
-        dest.writeString(longitude);
+        dest.writeValue(location);
     }
 
     @SuppressWarnings("unused")
