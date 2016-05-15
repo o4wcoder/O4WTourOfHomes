@@ -56,14 +56,16 @@ public class MainActivity extends AppCompatActivity
     private static final String XML_TAG_SECTION = "section";
     private static final String XML_TAG_IMAGE = "image";
 
+    private static final String ARG_FIRST_TIME = "first_times";
+    private static final String ARG_HOME_LIST = "home_list";
     /******************************************************************************************/
     /*                                     Local Data                                         */
     /******************************************************************************************/
     private GoogleApiClient mGoogleApiClient;
     private LatLng mFourthWardParkLocation;
     NavigationView mNavigationView;
-
     private ArrayList<Home> mHomeList = null;
+    boolean mIsFirstTime = true;
 
 
 
@@ -87,21 +89,46 @@ public class MainActivity extends AppCompatActivity
         mNavigationView.setNavigationItemSelectedListener(this);
 
         Log.e(TAG,"onCreate() Load Home Data");
-        new LoadDataTask().execute();
+
 
         //Start with Home Fragment
-        HomeFragment firstFragment = new HomeFragment();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container,firstFragment).commit();
+        if(savedInstanceState == null) {
+            //Load Home data and locations
+            new LoadDataTask().execute();
+            
+            Log.e(TAG,"Nothing saved, first time through. Set home fragment");
+            HomeFragment firstFragment = new HomeFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, firstFragment).commit();
 
-        //Select Home menu on Navigation Drawer
-        mNavigationView.setCheckedItem(R.id.nav_home);
+            //Select Home menu on Navigation Drawer
+            mNavigationView.setCheckedItem(R.id.nav_home);
 
+            mIsFirstTime = false;
+        }
+        else {
+            mIsFirstTime = savedInstanceState.getBoolean(ARG_FIRST_TIME);
+            mHomeList = savedInstanceState.getParcelableArrayList(ARG_HOME_LIST);
+
+            //If we got here, we may have rotated before the data was finished loading.
+            //Go try and fetch it again
+            if(mHomeList == null)
+                new LoadDataTask().execute();
+        }
 
 
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean(ARG_FIRST_TIME,mIsFirstTime);
+        outState.putParcelableArrayList(ARG_HOME_LIST,mHomeList);
+
+
+    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -107,6 +107,25 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
+//    @Override
+//    public void onActivityCreated(Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//
+//        Log.e(TAG,"onActivityCreate()");
+//        if(savedInstanceState != null) {
+//            Log.e(TAG,"onActivityCreate() get local data");
+//            mZoomLocation = savedInstanceState.getParcelable(ARG_LOCATION);
+//            mHomeList = savedInstanceState.getParcelableArrayList(ARG_HOME_LIST);
+//        }
+//    }
+
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        Log.e(TAG,"onSaveInstanceState()");
+//        outState.putParcelable(ARG_LOCATION,mZoomLocation);
+//        outState.putParcelableArrayList(ARG_HOME_LIST,mHomeList);
+//    }
 
     @Override
     public void onResume() {
