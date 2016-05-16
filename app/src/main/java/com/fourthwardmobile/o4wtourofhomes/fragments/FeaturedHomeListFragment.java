@@ -1,18 +1,19 @@
 package com.fourthwardmobile.o4wtourofhomes.fragments;
 
-import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.fourthwardmobile.o4wtourofhomes.R;
-import com.fourthwardmobile.o4wtourofhomes.adapters.HomeListAdapter;
+import com.fourthwardmobile.o4wtourofhomes.activities.FeaturedHomeDetailActivity;
+import com.fourthwardmobile.o4wtourofhomes.adapters.FeaturedHomeListAdapter;
+import com.fourthwardmobile.o4wtourofhomes.interfaces.Constants;
 import com.fourthwardmobile.o4wtourofhomes.models.Home;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
  * Use the {@link FeaturedHomeListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FeaturedHomeListFragment extends Fragment {
+public class FeaturedHomeListFragment extends Fragment implements Constants{
 
     /************************************************************************************/
     /*                                    Constants                                     */
@@ -81,11 +82,22 @@ public class FeaturedHomeListFragment extends Fragment {
 
         mRecyclerView = (RecyclerView)view.findViewById(R.id.home_list_recycler_view);
         //Create Grid with 2 columns
-        mLayoutManager = new GridLayoutManager(getContext(),2);
+        //mLayoutManager = new GridLayoutManager(getContext(),2);
+        mLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         //Set Layout Manager for RecyclerView
         mRecyclerView.setLayoutManager(mLayoutManager);
         //Initialize the Adapter
-        mAdapter = new HomeListAdapter(getContext(),mHomeList);
+        mAdapter = new FeaturedHomeListAdapter(getContext(),mHomeList, new FeaturedHomeListAdapter.HomeListAdapterOnClickHandler() {
+            @Override
+            public void onClick(int position, FeaturedHomeListAdapter.FeaturedHomeListAdapterViewHolder vh) {
+                Log.e(TAG,"FeaturedHomeListFragment() onClick at position = " + position);
+
+                Intent intent = new Intent(getActivity(),FeaturedHomeDetailActivity.class);
+                intent.putExtra(EXTRA_HOME_POSITION,position);
+                intent.putExtra(EXTRA_HOME_LIST,mHomeList);
+                startActivity(intent);
+            }
+        });
         //Set the adapter for the RecyclerView;
         mRecyclerView.setAdapter(mAdapter);
 

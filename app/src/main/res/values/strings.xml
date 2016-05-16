@@ -26,4 +26,8 @@
 
     <!-- Error Messages -->
     <string name="no_network">No Network Connection Available. Maps will be disabled.</string>
+    <string name="title_activity_home_detail">HomeDetailActivity</string>
+
+    <!-- Transitions/Annimations -->
+    <string name="trans_home_image">trans_home_image</string>
 </resources>

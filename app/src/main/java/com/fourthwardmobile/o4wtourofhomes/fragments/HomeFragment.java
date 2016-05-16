@@ -1,7 +1,5 @@
 package com.fourthwardmobile.o4wtourofhomes.fragments;
 
-import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.fourthwardmobile.o4wtourofhomes.R;
-import com.fourthwardmobile.o4wtourofhomes.activities.HomeMapActivity;
 import com.fourthwardmobile.o4wtourofhomes.helpers.Util;
 import com.fourthwardmobile.o4wtourofhomes.interfaces.Constants;
 import com.google.android.gms.common.ConnectionResult;

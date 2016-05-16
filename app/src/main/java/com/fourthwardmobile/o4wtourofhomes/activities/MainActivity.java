@@ -1,6 +1,5 @@
 package com.fourthwardmobile.o4wtourofhomes.activities;
 
-import android.content.res.AssetManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
@@ -26,7 +25,6 @@ import com.fourthwardmobile.o4wtourofhomes.fragments.MapHomeFragment;
 import com.fourthwardmobile.o4wtourofhomes.helpers.Util;
 import com.fourthwardmobile.o4wtourofhomes.interfaces.Constants;
 import com.fourthwardmobile.o4wtourofhomes.models.Home;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -39,7 +37,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Constants, HomeFragment.OnFragmentCallback{
+        implements NavigationView.OnNavigationItemSelectedListener, Constants, HomeFragment.OnFragmentCallback
+       {
 
     /******************************************************************************************/
     /*                                     Constants                                          */
@@ -61,8 +60,6 @@ public class MainActivity extends AppCompatActivity
     /******************************************************************************************/
     /*                                     Local Data                                         */
     /******************************************************************************************/
-    private GoogleApiClient mGoogleApiClient;
-    private LatLng mFourthWardParkLocation;
     NavigationView mNavigationView;
     private ArrayList<Home> mHomeList = null;
     boolean mIsFirstTime = true;
@@ -320,6 +317,7 @@ public class MainActivity extends AppCompatActivity
         //Update Navigation Drawer to select the Map Menu
         mNavigationView.setCheckedItem(R.id.nav_map);
     }
+
 
 
     private class LoadDataTask extends AsyncTask<Void, Void, ArrayList<Home>> {

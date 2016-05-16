@@ -9,12 +9,12 @@ import com.fourthwardmobile.o4wtourofhomes.R;
 import com.fourthwardmobile.o4wtourofhomes.interfaces.Constants;
 import com.google.android.gms.maps.model.LatLng;
 
-public class HomeMapActivity extends AppCompatActivity implements Constants{
+public class FeaturedHomeMapActivity extends AppCompatActivity implements Constants{
 
     /*******************************************************************/
     /*                            Constants                            */
     /*******************************************************************/
-    private static final String TAG = HomeMapActivity.class.getSimpleName();
+    private static final String TAG = FeaturedHomeMapActivity.class.getSimpleName();
 
     /*******************************************************************/
     /*                           Local Data                            */
