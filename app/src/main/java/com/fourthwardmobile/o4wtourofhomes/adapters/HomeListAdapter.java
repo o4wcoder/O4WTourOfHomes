@@ -2,13 +2,16 @@ package com.fourthwardmobile.o4wtourofhomes.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.fourthwardmobile.o4wtourofhomes.R;
+import com.fourthwardmobile.o4wtourofhomes.activities.MainActivity;
 import com.fourthwardmobile.o4wtourofhomes.models.Home;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -17,6 +20,14 @@ import java.util.ArrayList;
  */
 public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHolder>{
 
+    /*******************************************************************************/
+    /*                               Constants                                     */
+    /*******************************************************************************/
+    private final static String TAG = HomeListAdapter.class.getSimpleName();
+
+    /*******************************************************************************/
+    /*                               Local Data                                    */
+    /*******************************************************************************/
     private Context mContext;
     private ArrayList<Home> mHomeList;
 
@@ -37,6 +48,8 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
+        Log.e(TAG,"Bind image = " + mHomeList.get(position).getImageUrl());
+      Picasso.with(mContext).load(mHomeList.get(position).getImageUrl()).into(holder.thumbnailImageView);
     }
 
     @Override
@@ -53,6 +66,7 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
 
             thumbnailImageView = (ImageView)view.findViewById(R.id.home_thumbnail_image_view);
         }
+
 
     }
 }

@@ -7,7 +7,7 @@
 		<hometype>Modern</hometype>
 		<year>2013</year>
 		<section>Fourth Ward Alliance</section>
-		<image>test.img</image>
+		<image>http://i70.photobucket.com/albums/i102/chare37/2015_O4W_TourOfHomes/home_2015_416_glen_iris_zpsykxigw8m.png</image>
 	</home>
 	<home>
 		<name>285 Alaska Avenue</name>
@@ -16,7 +16,7 @@
 		<hometype>Traditional</hometype>
 		<year>1930</year>
 		<section>Fourth Ward Neighbors</section>
-		<image>test.img</image>
+		<image>http://i70.photobucket.com/albums/i102/chare37/2015_O4W_TourOfHomes/home_2015_285_alaska_zpsipqion5x.png</image>
 	</home>
 	<home>
 		<name>608 McGruder Street</name>
@@ -25,7 +25,7 @@
 		<hometype>Modern</hometype>
 		<year>2014</year>
 		<section>Fourth Ward Neighbors</section>
-		<image>test.img</image>
+		<image>http://i70.photobucket.com/albums/i102/chare37/2015_O4W_TourOfHomes/home_2015_608_mcgruder_zpsmbs9uvi2.png</image>
 	</home>
 	<home>
 		<name>440 Gartrell Street</name>
@@ -34,7 +34,7 @@
 		<hometype>Moden</hometype>
 		<year>2007</year>
 		<section>Fourth &amp; SAND</section>
-		<image>test.img</image>
+		<image>http://i70.photobucket.com/albums/i102/chare37/2015_O4W_TourOfHomes/home_2015_440_gartrell_zpszbndlikr.png</image>
 	</home>
 	<home>
 		<name>637 John Wesley Dobbs Avenue</name>
@@ -43,7 +43,7 @@
 		<hometype>Traditional</hometype>
 		<year>2006</year>
 		<section>Fourth Ward Neighbors</section>
-		<image>test.img</image>
+		<image>http://i70.photobucket.com/albums/i102/chare37/2015_O4W_TourOfHomes/home_2015_637_jwd_zpsjlr5nsbx.png</image>
 	</home>
 	<home>
 		<name>148 Howell Street</name>
@@ -52,16 +52,16 @@
 		<hometype>Traditional</hometype>
 		<year>1997</year>
 		<section>Fourth Ward Neighbors</section>
-		<image>test.img</image>
+		<image>http://i70.photobucket.com/albums/i102/chare37/2015_O4W_TourOfHomes/home_2015_148_howell_zpsqug4fctv.png</image>
 	</home>
 	<home>
 		<name>Bedford Pine Apartment</name>
-		<address>496 Boulevard NE, Atlanta Ga 30308</address>
+		<address>496 Boulevard NE, Atlanta, GA</address>
 		<owner>N/A</owner>
 		<hometype>Apartment</hometype>
 		<year>1920</year>
 		<section>Fourth Ward West</section>
-		<image>test.img</image>
+		<image>http://i70.photobucket.com/albums/i102/chare37/2015_O4W_TourOfHomes/home_2015_beford_pine_zps2plzpbc2.png</image>
 	</home>
 	<home>
 		<name>571 Rankin Street</name>
@@ -70,6 +70,6 @@
 		<hometype>Traditional</hometype>
 		<year>1920</year>
 		<section>Fourth Ward Alliance</section>
-		<image>test.img</image>
+		<image>http://i70.photobucket.com/albums/i102/chare37/2015_O4W_TourOfHomes/home_2015_571_rankin_zpsgpyx7asg.png</image>
 	</home>
 </data-set>

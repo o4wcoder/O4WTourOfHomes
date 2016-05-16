@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity
         if(savedInstanceState == null) {
             //Load Home data and locations
             new LoadDataTask().execute();
-            
+
             Log.e(TAG,"Nothing saved, first time through. Set home fragment");
             HomeFragment firstFragment = new HomeFragment();
             getSupportFragmentManager().beginTransaction()
@@ -293,6 +293,9 @@ public class MainActivity extends AppCompatActivity
                         }
                         else if(name.equalsIgnoreCase(XML_TAG_SECTION)) {
                             currentHome.setSection(parser.nextText());
+                        }
+                        else if(name.equalsIgnoreCase(XML_TAG_IMAGE)) {
+                            currentHome.setImageUrl(parser.nextText());
                         }
                     }
                     break;
