@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +61,6 @@ public class FeaturedHomeDetailFragment extends Fragment {
         FeaturedHomeDetailFragment fragment = new FeaturedHomeDetailFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_IMAGE_POSITION, position);
-      //  args.putParcelable(ARG_HOME, home);
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,12 +68,18 @@ public class FeaturedHomeDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mPosition = getArguments().getInt(ARG_IMAGE_POSITION);
 
-            //Get the Home at the slected position in the list
-            mHome = ((OnFragmentCallback)getActivity()).getHome(mPosition);
+        if(savedInstanceState == null) {
 
+            if (getArguments() != null) {
+                mPosition = getArguments().getInt(ARG_IMAGE_POSITION);
+                //Get the Home at the slected position in the list
+                mHome = ((OnFragmentCallback) getActivity()).getHome(mPosition);
+            }
+        }
+        else {
+            mPosition = savedInstanceState.getInt(ARG_IMAGE_POSITION);
+            mHome = savedInstanceState.getParcelable(ARG_HOME);
         }
     }
 
@@ -82,17 +89,39 @@ public class FeaturedHomeDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home_detail, container, false);
 
-       // ((TextView)view.findViewById(R.id.detail_text_view)).setText("Got home = " + ((OnFragmentCallback)getActivity()).getHome(mPosition).getName());
-
         ImageView homeImageView = (ImageView)view.findViewById(R.id.detail_home_image);
 
         Picasso.with(getActivity()).load(mHome.getImageUrl()).into(homeImageView);
 
         mHomeNameTextView = (TextView)view.findViewById(R.id.detail_home_name);
         mHomeNameTextView.setText(mHome.getName());
+
+        TextView ownerTextView = (TextView)view.findViewById(R.id.detail_owner_text_view);
+        ownerTextView.setText(getSpannedString(getString(R.string.detail_header_owner),mHome.getOwners()));
+
+        TextView homeTypeTextView = (TextView)view.findViewById(R.id.detail_home_type_text_view);
+        homeTypeTextView.setText(getSpannedString(getString(R.string.detail_header_home_type),mHome.getHomeType()));
+
+        TextView yearBuiltTextView = (TextView)view.findViewById(R.id.detail_year_built_text_view);
+        yearBuiltTextView.setText(getSpannedString(getString(R.string.detail_header_year_built),mHome.getYearBuilt()));
+
+        TextView sectionTextView = (TextView)view.findViewById(R.id.detail_section_text_view);
+        sectionTextView.setText(getSpannedString(getString(R.string.detail_header_section),mHome.getSection()));
+
         return view;
     }
 
+    private Spanned getSpannedString(String heading, String body) {
+
+        return Html.fromHtml("<b>" + heading + "</b>" + " " + body);
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.e(TAG,"onSaveInstanceState()");
+        outState.putInt(ARG_IMAGE_POSITION,mPosition);
+        outState.putParcelable(ARG_HOME,mHome);
+    }
     // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {
 //        if (mListener != null) {

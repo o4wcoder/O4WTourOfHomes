@@ -30,4 +30,11 @@
 
     <!-- Transitions/Annimations -->
     <string name="trans_home_image">trans_home_image</string>
+
+    <!-- Home Detail Layout -->
+    <string name="detail_header_owner">OWNER:</string>
+    <string name="detail_header_home_type">HOME TYPE:</string>
+    <string name="detail_header_year_built">YEAR BUILT:</string>
+    <string name="detail_header_section">SECTION:</string>
+    <string name="detail_header_description">DESCRIPTION:</string>
 </resources>

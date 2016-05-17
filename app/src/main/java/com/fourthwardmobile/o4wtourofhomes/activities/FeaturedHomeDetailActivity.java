@@ -45,7 +45,10 @@ public class FeaturedHomeDetailActivity extends AppCompatActivity implements Con
     @Override
     public Home getHome(int position) {
 
-        return mHomeList.get(position);
+        if(mHomeList != null)
+            return mHomeList.get(position);
+        else
+            return null;
     }
 
     private class FeaturedHomeDetailFragmentPagerAdapter extends FragmentStatePagerAdapter  {
