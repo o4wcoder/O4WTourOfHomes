@@ -1,11 +1,13 @@
 package com.fourthwardmobile.o4wtourofhomes.activities;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.fourthwardmobile.o4wtourofhomes.R;
 import com.fourthwardmobile.o4wtourofhomes.fragments.FeaturedHomeDetailFragment;
@@ -30,6 +32,12 @@ public class FeaturedHomeDetailActivity extends AppCompatActivity implements Con
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            getWindow().getDecorView().setSystemUiVisibility(
+//                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+//        }
+
         setContentView(R.layout.activity_home_detail);
 
 
@@ -66,9 +74,6 @@ public class FeaturedHomeDetailActivity extends AppCompatActivity implements Con
         @Override
         public int getCount() {
 
-            /**
-             * !!!!!!!!!!!!!!! Don't hardcode!!!!!!!!!!!!!!!!!!!!
-             */
             return mHomeList.size();
         }
     }

@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.fourthwardmobile.o4wtourofhomes.R;
 
 /**
  * Created by Chris Hare on 5/9/2016.
@@ -29,5 +30,10 @@ public class Util {
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public static String getTransitionName(Context context, int position) {
+
+        return context.getString(R.string.trans_home_image) + String.valueOf(position);
     }
 }

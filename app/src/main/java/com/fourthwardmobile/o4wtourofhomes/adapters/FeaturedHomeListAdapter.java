@@ -1,6 +1,7 @@
 package com.fourthwardmobile.o4wtourofhomes.adapters;
 
 import android.content.Context;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.fourthwardmobile.o4wtourofhomes.R;
+import com.fourthwardmobile.o4wtourofhomes.helpers.Util;
 import com.fourthwardmobile.o4wtourofhomes.models.Home;
 import com.squareup.picasso.Picasso;
 
@@ -50,8 +52,9 @@ public class FeaturedHomeListAdapter extends RecyclerView.Adapter<FeaturedHomeLi
     @Override
     public void onBindViewHolder(FeaturedHomeListAdapterViewHolder holder, int position) {
 
-        Log.e(TAG,"Bind image = " + mHomeList.get(position).getImageUrl());
-      Picasso.with(mContext).load(mHomeList.get(position).getImageUrl()).into(holder.thumbnailImageView);
+        Log.e(TAG, "Bind image = " + mHomeList.get(position).getImageUrl());
+        Picasso.with(mContext).load(mHomeList.get(position).getImageUrl()).into(holder.thumbnailImageView);
+        ViewCompat.setTransitionName(holder.thumbnailImageView, Util.getTransitionName(mContext, position));
     }
 
     @Override

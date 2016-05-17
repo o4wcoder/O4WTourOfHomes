@@ -1,11 +1,17 @@
 package com.fourthwardmobile.o4wtourofhomes.fragments;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.graphics.Palette;
 import android.text.Html;
 import android.text.Spanned;
+import android.transition.Transition;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fourthwardmobile.o4wtourofhomes.R;
+import com.fourthwardmobile.o4wtourofhomes.helpers.ImageTransitionListener;
 import com.fourthwardmobile.o4wtourofhomes.models.Home;
 import com.squareup.picasso.Picasso;
 
@@ -33,12 +40,16 @@ public class FeaturedHomeDetailFragment extends Fragment {
     private static final String TAG = FeaturedHomeDetailFragment.class.getSimpleName();
     private static final String ARG_IMAGE_POSITION = "position";
     private static final String ARG_HOME = "home";
+    int TEXT_FADE_DURATION = 500;
 
     /************************************************************************************/
     /*                                  Local Data                                      */
     /************************************************************************************/
     private int mPosition;
     private Home mHome;
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
+
+    private int mMutedColor = 0xFF333333;
 
     private TextView mHomeNameTextView;
 
@@ -89,12 +100,59 @@ public class FeaturedHomeDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home_detail, container, false);
 
-        ImageView homeImageView = (ImageView)view.findViewById(R.id.detail_home_image);
+        final ImageView homeImageView = (ImageView)view.findViewById(R.id.detail_home_image);
 
-        Picasso.with(getActivity()).load(mHome.getImageUrl()).into(homeImageView);
+        //Get CollapsingToolbarLayout
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout)view.findViewById(R.id.collapsing_toolbar);
+
+        Picasso.with(getActivity()).load(mHome.getImageUrl()).into(homeImageView, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.e(TAG,"Picasso Callback. Finished loading image. ");
+                        Bitmap bitmap = ((BitmapDrawable)homeImageView.getDrawable()).getBitmap();
+                        Palette p = Palette.generate(bitmap, 12);
+                        mMutedColor = p.getDarkMutedColor(0xFF333333);
+
+                        //Set title and colors for collapsing toolbar
+                        mCollapsingToolbarLayout.setTitle(mHome.getName());
+                        mCollapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
+
+                        //Set content descriptioni for toolbar/title
+                        mCollapsingToolbarLayout.setContentDescription(mHome.getName());
+
+                        //Set pallet colors when toolbar is collapsed
+                        int primaryColor = getResources().getColor(R.color.colorPrimary);
+                        int primaryDarkColor = getResources().getColor(R.color.colorPrimaryDark);
+                        mCollapsingToolbarLayout.setContentScrimColor(p.getMutedColor(primaryColor));
+                        mCollapsingToolbarLayout.setStatusBarScrimColor(p.getDarkMutedColor(primaryDarkColor));
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
 
         mHomeNameTextView = (TextView)view.findViewById(R.id.detail_home_name);
         mHomeNameTextView.setText(mHome.getName());
+
+        //Check for profile title enter shared transition
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            getActivity().getWindow().getSharedElementEnterTransition().addListener(new ImageTransitionListener() {
+                @Override
+                public void onTransitionEnd(Transition transition) {
+
+                    //End of transition, fade in days of week row
+                    mHomeNameTextView.animate().setDuration(BUTTON_FADE_DURATION).alpha(1f);
+                }
+
+                @Override
+                public void onTransitionStart(Transition transition) {
+                    //Start of transition, make days of week row invisible
+                    mHomeNameTextView.setAlpha(0f);
+                }
+            });
 
         TextView ownerTextView = (TextView)view.findViewById(R.id.detail_owner_text_view);
         ownerTextView.setText(getSpannedString(getString(R.string.detail_header_owner),mHome.getOwners()));
@@ -108,6 +166,13 @@ public class FeaturedHomeDetailFragment extends Fragment {
         TextView sectionTextView = (TextView)view.findViewById(R.id.detail_section_text_view);
         sectionTextView.setText(getSpannedString(getString(R.string.detail_header_section),mHome.getSection()));
 
+
+        view.findViewById(R.id.map_fab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         return view;
     }
 
@@ -164,5 +229,10 @@ public class FeaturedHomeDetailFragment extends Fragment {
     public interface  OnFragmentCallback {
 
         Home getHome(int position);
+    }
+
+    public interface OnImageLoadingCallback {
+
+        void onImageLoaded();
     }
 }

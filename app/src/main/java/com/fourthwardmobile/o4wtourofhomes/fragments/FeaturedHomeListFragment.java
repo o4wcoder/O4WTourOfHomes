@@ -1,8 +1,11 @@
 package com.fourthwardmobile.o4wtourofhomes.fragments;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -90,12 +93,22 @@ public class FeaturedHomeListFragment extends Fragment implements Constants{
         mAdapter = new FeaturedHomeListAdapter(getContext(),mHomeList, new FeaturedHomeListAdapter.HomeListAdapterOnClickHandler() {
             @Override
             public void onClick(int position, FeaturedHomeListAdapter.FeaturedHomeListAdapterViewHolder vh) {
-                Log.e(TAG,"FeaturedHomeListFragment() onClick at position = " + position);
+                Log.e(TAG,"FeaturedHomeListFragment() onClick at position = " + position + " trans name = " + vh.thumbnailImageView.getTransitionName());
+
 
                 Intent intent = new Intent(getActivity(),FeaturedHomeDetailActivity.class);
                 intent.putExtra(EXTRA_HOME_POSITION,position);
                 intent.putExtra(EXTRA_HOME_LIST,mHomeList);
-                startActivity(intent);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                    Log.e(TAG,"onClick() with transition name = " + vh.thumbnailImageView.getTransitionName());
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                            new Pair<View,String>(vh.thumbnailImageView,vh.thumbnailImageView.getTransitionName()));
+                    startActivity(intent,options.toBundle());
+                } else {
+                    startActivity(intent);
+                }
             }
         });
         //Set the adapter for the RecyclerView;
@@ -105,41 +118,4 @@ public class FeaturedHomeListFragment extends Fragment implements Constants{
         return view;
     }
 
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-//
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        void onFragmentInteraction(Uri uri);
-//    }
 }
