@@ -40,6 +40,7 @@ public class FeaturedHomeDetailActivity extends AppCompatActivity implements Con
 
         setContentView(R.layout.activity_home_detail);
 
+        supportPostponeEnterTransition();
 
 
         mStartingPosition = getIntent().getIntExtra(EXTRA_HOME_POSITION,0);

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.transition.Transition;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 
 import com.fourthwardmobile.o4wtourofhomes.R;
 import com.fourthwardmobile.o4wtourofhomes.helpers.ImageTransitionListener;
+import com.fourthwardmobile.o4wtourofhomes.helpers.Util;
 import com.fourthwardmobile.o4wtourofhomes.models.Home;
 import com.squareup.picasso.Picasso;
 
@@ -52,6 +54,7 @@ public class FeaturedHomeDetailFragment extends Fragment {
     private int mMutedColor = 0xFF333333;
 
     private TextView mHomeNameTextView;
+    ImageView mHomeImageView;
 
    // private OnFragmentInteractionListener mListener;
 
@@ -100,16 +103,34 @@ public class FeaturedHomeDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home_detail, container, false);
 
-        final ImageView homeImageView = (ImageView)view.findViewById(R.id.detail_home_image);
+         mHomeImageView = (ImageView)view.findViewById(R.id.detail_home_image);
+        //Check for profile title enter shared transition
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mHomeImageView.setTransitionName(Util.getTransitionName(getActivity(), mPosition));
+            getActivity().getWindow().getSharedElementEnterTransition().addListener(new ImageTransitionListener() {
+                @Override
+                public void onTransitionEnd(Transition transition) {
+
+                    //End of transition, fade in days of week row
+                    mHomeNameTextView.animate().setDuration(TEXT_FADE_DURATION).alpha(1f);
+                }
+
+                @Override
+                public void onTransitionStart(Transition transition) {
+                    //Start of transition, make days of week row invisible
+                    mHomeNameTextView.setAlpha(0f);
+                }
+            });
+        }
 
         //Get CollapsingToolbarLayout
         mCollapsingToolbarLayout = (CollapsingToolbarLayout)view.findViewById(R.id.collapsing_toolbar);
 
-        Picasso.with(getActivity()).load(mHome.getImageUrl()).into(homeImageView, new com.squareup.picasso.Callback() {
+        Picasso.with(getActivity()).load(mHome.getImageUrl()).into(mHomeImageView, new com.squareup.picasso.Callback() {
                     @Override
                     public void onSuccess() {
                         Log.e(TAG,"Picasso Callback. Finished loading image. ");
-                        Bitmap bitmap = ((BitmapDrawable)homeImageView.getDrawable()).getBitmap();
+                        Bitmap bitmap = ((BitmapDrawable)mHomeImageView.getDrawable()).getBitmap();
                         Palette p = Palette.generate(bitmap, 12);
                         mMutedColor = p.getDarkMutedColor(0xFF333333);
 
@@ -125,6 +146,10 @@ public class FeaturedHomeDetailFragment extends Fragment {
                         int primaryDarkColor = getResources().getColor(R.color.colorPrimaryDark);
                         mCollapsingToolbarLayout.setContentScrimColor(p.getMutedColor(primaryColor));
                         mCollapsingToolbarLayout.setStatusBarScrimColor(p.getDarkMutedColor(primaryDarkColor));
+
+                        //Now that we've successfully loaded the image, we can start the
+                        //shared transition.
+                        getActivity().supportStartPostponedEnterTransition();
                     }
 
                     @Override
@@ -136,23 +161,6 @@ public class FeaturedHomeDetailFragment extends Fragment {
         mHomeNameTextView = (TextView)view.findViewById(R.id.detail_home_name);
         mHomeNameTextView.setText(mHome.getName());
 
-        //Check for profile title enter shared transition
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-            getActivity().getWindow().getSharedElementEnterTransition().addListener(new ImageTransitionListener() {
-                @Override
-                public void onTransitionEnd(Transition transition) {
-
-                    //End of transition, fade in days of week row
-                    mHomeNameTextView.animate().setDuration(BUTTON_FADE_DURATION).alpha(1f);
-                }
-
-                @Override
-                public void onTransitionStart(Transition transition) {
-                    //Start of transition, make days of week row invisible
-                    mHomeNameTextView.setAlpha(0f);
-                }
-            });
 
         TextView ownerTextView = (TextView)view.findViewById(R.id.detail_owner_text_view);
         ownerTextView.setText(getSpannedString(getString(R.string.detail_header_owner),mHome.getOwners()));

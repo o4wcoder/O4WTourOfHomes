@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.fourthwardmobile.o4wtourofhomes.R;
 import com.fourthwardmobile.o4wtourofhomes.activities.FeaturedHomeDetailActivity;
@@ -114,8 +115,24 @@ public class FeaturedHomeListFragment extends Fragment implements Constants{
         //Set the adapter for the RecyclerView;
         mRecyclerView.setAdapter(mAdapter);
 
+//        mRecyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+//            @Override
+//            public boolean onPreDraw() {
+//                getActivity().supportStartPostponedEnterTransition();
+//                return true;
+//            }
+//        });
+
         Log.e(TAG,"onCreateView() Got home list count = " + mHomeList.size());
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+
+        getActivity().supportPostponeEnterTransition();
+
+        super.onActivityCreated(savedInstanceState);
     }
 
 }
