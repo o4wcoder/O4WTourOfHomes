@@ -87,7 +87,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_margin="16dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/home_detail_bottom_panel">
         <TextView
             style="@style/DetailTextView"
             android:id="@+id/detail_owner_text_view"/>

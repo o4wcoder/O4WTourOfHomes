@@ -15,5 +15,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowEnterTransition">@transition/home_detail_enter_transition
+        </item>
+        <item name="android:windowReturnTransition">@transition/home_detail_return_transition
+        </item>
     </style>
 </resources>

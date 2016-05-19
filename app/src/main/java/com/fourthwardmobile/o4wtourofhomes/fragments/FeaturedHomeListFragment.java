@@ -3,6 +3,7 @@ package com.fourthwardmobile.o4wtourofhomes.fragments;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
@@ -16,6 +17,7 @@ import android.view.ViewTreeObserver;
 
 import com.fourthwardmobile.o4wtourofhomes.R;
 import com.fourthwardmobile.o4wtourofhomes.activities.FeaturedHomeDetailActivity;
+import com.fourthwardmobile.o4wtourofhomes.activities.MainActivity;
 import com.fourthwardmobile.o4wtourofhomes.adapters.FeaturedHomeListAdapter;
 import com.fourthwardmobile.o4wtourofhomes.interfaces.Constants;
 import com.fourthwardmobile.o4wtourofhomes.models.Home;
@@ -103,10 +105,11 @@ public class FeaturedHomeListFragment extends Fragment implements Constants{
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-                    Log.e(TAG,"onClick() with transition name = " + vh.thumbnailImageView.getTransitionName());
+
                     ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
                             new Pair<View,String>(vh.thumbnailImageView,vh.thumbnailImageView.getTransitionName()));
-                    startActivity(intent,options.toBundle());
+                    ActivityCompat.startActivity(getActivity(),intent,options.toBundle());
+
                 } else {
                     startActivity(intent);
                 }
@@ -127,12 +130,16 @@ public class FeaturedHomeListFragment extends Fragment implements Constants{
         return view;
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+//    @Override
+//    public void onActivityCreated(Bundle savedInstanceState) {
+//
+//        getActivity().supportPostponeEnterTransition();
+//
+//        super.onActivityCreated(savedInstanceState);
+//    }
 
-        getActivity().supportPostponeEnterTransition();
 
-        super.onActivityCreated(savedInstanceState);
-    }
+
+
 
 }

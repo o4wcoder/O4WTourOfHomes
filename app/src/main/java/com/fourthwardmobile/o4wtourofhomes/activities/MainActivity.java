@@ -1,12 +1,17 @@
 package com.fourthwardmobile.o4wtourofhomes.activities;
 
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
+import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,10 +20,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.fourthwardmobile.o4wtourofhomes.R;
+import com.fourthwardmobile.o4wtourofhomes.adapters.FeaturedHomeListAdapter;
 import com.fourthwardmobile.o4wtourofhomes.fragments.FeaturedHomeListFragment;
 import com.fourthwardmobile.o4wtourofhomes.fragments.HomeFragment;
 import com.fourthwardmobile.o4wtourofhomes.fragments.MapHomeFragment;
@@ -37,8 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Constants, HomeFragment.OnFragmentCallback
-       {
+        implements NavigationView.OnNavigationItemSelectedListener, Constants, HomeFragment.OnFragmentCallback {
 
     /******************************************************************************************/
     /*                                     Constants                                          */
@@ -65,14 +71,13 @@ public class MainActivity extends AppCompatActivity
     boolean mIsFirstTime = true;
 
 
-
     private ImageView mTicketImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.e(TAG,"onCreate()");
+        Log.e(TAG, "onCreate()");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -85,15 +90,15 @@ public class MainActivity extends AppCompatActivity
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
 
-        Log.e(TAG,"onCreate() Load Home Data");
+        Log.e(TAG, "onCreate() Load Home Data");
 
 
         //Start with Home Fragment
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             //Load Home data and locations
             new LoadDataTask().execute();
 
-            Log.e(TAG,"Nothing saved, first time through. Set home fragment");
+            Log.e(TAG, "Nothing saved, first time through. Set home fragment");
             HomeFragment firstFragment = new HomeFragment();
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, firstFragment).commit();
@@ -102,30 +107,29 @@ public class MainActivity extends AppCompatActivity
             mNavigationView.setCheckedItem(R.id.nav_home);
 
             mIsFirstTime = false;
-        }
-        else {
+        } else {
             mIsFirstTime = savedInstanceState.getBoolean(ARG_FIRST_TIME);
             mHomeList = savedInstanceState.getParcelableArrayList(ARG_HOME_LIST);
 
             //If we got here, we may have rotated before the data was finished loading.
             //Go try and fetch it again
-            if(mHomeList == null)
+            if (mHomeList == null)
                 new LoadDataTask().execute();
         }
-
 
 
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState){
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putBoolean(ARG_FIRST_TIME,mIsFirstTime);
-        outState.putParcelableArrayList(ARG_HOME_LIST,mHomeList);
+        outState.putBoolean(ARG_FIRST_TIME, mIsFirstTime);
+        outState.putParcelableArrayList(ARG_HOME_LIST, mHomeList);
 
 
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -167,10 +171,9 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = null;
         int id = item.getItemId();
 
-        if(id == R.id.nav_home) {
+        if (id == R.id.nav_home) {
             fragment = HomeFragment.newInstance();
-        }
-        else if (id == R.id.nav_featured_homes) {
+        } else if (id == R.id.nav_featured_homes) {
             fragment = FeaturedHomeListFragment.newInstance(mHomeList);
 
         } else if (id == R.id.nav_map) {
@@ -189,18 +192,19 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void updateFragment(Fragment fragment) {
-        if(fragment != null) {
+        if (fragment != null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.addToBackStack(null);
-            transaction.replace(R.id.fragment_container,fragment);
+            transaction.replace(R.id.fragment_container, fragment);
             transaction.commit();
         }
 
     }
+
     private ArrayList<Home> loadHomeData() {
 
         //String strXml = null;
-        Log.e(TAG,"loadHomeData() Inside");
+        Log.e(TAG, "loadHomeData() Inside");
 
         XmlPullParserFactory pullParserFactory;
         try {
@@ -213,7 +217,7 @@ public class MainActivity extends AppCompatActivity
 
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             //Set Input stream to the XML file as the source for the parser
-            parser.setInput(inputStream,null);
+            parser.setInput(inputStream, null);
 
             return parseXML(parser);
 
@@ -221,7 +225,7 @@ public class MainActivity extends AppCompatActivity
             return null;
 
         } catch (IOException e) {
-            Log.e(TAG,"Exception loading XML data file. " + e.getMessage());
+            Log.e(TAG, "Exception loading XML data file. " + e.getMessage());
             return null;
         }
     }
@@ -235,10 +239,10 @@ public class MainActivity extends AppCompatActivity
         ArrayList<Home> homeList = null;
 
         //Got through each line of XML till the end
-        while(eventType != XmlPullParser.END_DOCUMENT) {
+        while (eventType != XmlPullParser.END_DOCUMENT) {
             String name = null;
 
-            switch(eventType) {
+            switch (eventType) {
                 case XmlPullParser.START_DOCUMENT:
                     homeList = new ArrayList<>();
 
@@ -246,21 +250,20 @@ public class MainActivity extends AppCompatActivity
                 case XmlPullParser.START_TAG:
                     name = parser.getName();
 
-                    if(name.equalsIgnoreCase(XML_TAG_HOME)) {
+                    if (name.equalsIgnoreCase(XML_TAG_HOME)) {
 
                         currentHome = new Home();
-                    }
-                    else if (currentHome != null) {
+                    } else if (currentHome != null) {
 
-                        if(name.equalsIgnoreCase(XML_TAG_NAME)) {
+                        if (name.equalsIgnoreCase(XML_TAG_NAME)) {
                             currentHome.setName(parser.nextText());
                         }
-                        if(name.equalsIgnoreCase(XML_TAG_ADDRESS)) {
+                        if (name.equalsIgnoreCase(XML_TAG_ADDRESS)) {
                             currentHome.setAddress(parser.nextText());
 
                             try {
 
-                                if(Util.isNetworkAvailable(this)) {
+                                if (Util.isNetworkAvailable(this)) {
                                     List<Address> addresses;
                                     Geocoder mGeocoder = new Geocoder(getApplicationContext());
                                     addresses = mGeocoder.getFromLocationName(currentHome.getAddress(), 1);
@@ -270,42 +273,35 @@ public class MainActivity extends AppCompatActivity
                                                 addresses.get(0).getLongitude()));
                                     } else
                                         Log.e(TAG, "Did not get any return from geocoder for street address = " + currentHome.getAddress());
+                                } else {
+                                    Toast.makeText(this, getString(R.string.no_network), Toast.LENGTH_LONG).show();
                                 }
-                                else {
-                                    Toast.makeText(this,getString(R.string.no_network),Toast.LENGTH_LONG).show();
-                                }
+                            } catch (IOException e) {
+                                Log.e(TAG, "Got exception with goecoder " + e.getMessage());
                             }
-                            catch (IOException e) {
-                                Log.e(TAG,"Got exception with goecoder " + e.getMessage());
-                            }
-                        }
-                        else if(name.equalsIgnoreCase(XML_TAG_OWNER)) {
+                        } else if (name.equalsIgnoreCase(XML_TAG_OWNER)) {
                             currentHome.setOwners(parser.nextText());
-                        }
-                        else if(name.equalsIgnoreCase(XML_TAG_HOME_TYPE)) {
+                        } else if (name.equalsIgnoreCase(XML_TAG_HOME_TYPE)) {
                             currentHome.setHomeType(parser.nextText());
-                        }
-                        else if(name.equalsIgnoreCase(XML_TAG_YEAR)) {
+                        } else if (name.equalsIgnoreCase(XML_TAG_YEAR)) {
                             currentHome.setYearBuilt(parser.nextText());
-                        }
-                        else if(name.equalsIgnoreCase(XML_TAG_SECTION)) {
+                        } else if (name.equalsIgnoreCase(XML_TAG_SECTION)) {
                             currentHome.setSection(parser.nextText());
-                        }
-                        else if(name.equalsIgnoreCase(XML_TAG_IMAGE)) {
+                        } else if (name.equalsIgnoreCase(XML_TAG_IMAGE)) {
                             currentHome.setImageUrl(parser.nextText());
                         }
                     }
                     break;
                 case XmlPullParser.END_TAG:
                     name = parser.getName();
-                    if(name.equalsIgnoreCase(XML_TAG_HOME) && currentHome != null) {
+                    if (name.equalsIgnoreCase(XML_TAG_HOME) && currentHome != null) {
                         homeList.add(currentHome);
                     }
             }
             eventType = parser.next();
         }
 
-        Log.e(TAG,"End parsing XML, got number of homes = " + homeList.size());
+        Log.e(TAG, "End parsing XML, got number of homes = " + homeList.size());
 
         return homeList;
     }
@@ -317,7 +313,6 @@ public class MainActivity extends AppCompatActivity
         //Update Navigation Drawer to select the Map Menu
         mNavigationView.setCheckedItem(R.id.nav_map);
     }
-
 
 
     private class LoadDataTask extends AsyncTask<Void, Void, ArrayList<Home>> {
@@ -332,7 +327,7 @@ public class MainActivity extends AppCompatActivity
 
             mHomeList = homeList;
 
-            Log.e(TAG,"Finished AsynTask with home list size = " + mHomeList.size());
+            Log.e(TAG, "Finished AsynTask with home list size = " + mHomeList.size());
         }
     }
 }

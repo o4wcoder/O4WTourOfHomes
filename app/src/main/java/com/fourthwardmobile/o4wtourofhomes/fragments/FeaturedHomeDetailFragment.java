@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ public class FeaturedHomeDetailFragment extends Fragment {
     /************************************************************************************/
     private static final String TAG = FeaturedHomeDetailFragment.class.getSimpleName();
     private static final String ARG_IMAGE_POSITION = "position";
+    private static final String ARG_IMAGE_STARTING_POSITION = "starting_position";
     private static final String ARG_HOME = "home";
     int TEXT_FADE_DURATION = 500;
 
@@ -48,6 +50,7 @@ public class FeaturedHomeDetailFragment extends Fragment {
     /*                                  Local Data                                      */
     /************************************************************************************/
     private int mPosition;
+    private int mStartingPosition;
     private Home mHome;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
 
@@ -55,6 +58,7 @@ public class FeaturedHomeDetailFragment extends Fragment {
 
     private TextView mHomeNameTextView;
     ImageView mHomeImageView;
+    boolean mIsTransitioning;
 
    // private OnFragmentInteractionListener mListener;
 
@@ -71,10 +75,12 @@ public class FeaturedHomeDetailFragment extends Fragment {
      * @return A new instance of fragment FeaturedHomeDetailFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static FeaturedHomeDetailFragment newInstance(int position) {
+    public static FeaturedHomeDetailFragment newInstance(int startingPosition,int position ) {
         FeaturedHomeDetailFragment fragment = new FeaturedHomeDetailFragment();
         Bundle args = new Bundle();
+        args.putInt(ARG_IMAGE_STARTING_POSITION,startingPosition);
         args.putInt(ARG_IMAGE_POSITION, position);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -87,14 +93,21 @@ public class FeaturedHomeDetailFragment extends Fragment {
 
             if (getArguments() != null) {
                 mPosition = getArguments().getInt(ARG_IMAGE_POSITION);
+                mStartingPosition = getArguments().getInt(ARG_IMAGE_STARTING_POSITION);
                 //Get the Home at the slected position in the list
                 mHome = ((OnFragmentCallback) getActivity()).getHome(mPosition);
             }
         }
         else {
+            //Rotated, get data out of saved instance state
             mPosition = savedInstanceState.getInt(ARG_IMAGE_POSITION);
+            mStartingPosition = getArguments().getInt(ARG_IMAGE_STARTING_POSITION);
             mHome = savedInstanceState.getParcelable(ARG_HOME);
         }
+
+        //See if we had a transition from the main activiy
+        mIsTransitioning = savedInstanceState == null && mStartingPosition == mPosition;
+
     }
 
     @Override
@@ -103,64 +116,33 @@ public class FeaturedHomeDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home_detail, container, false);
 
-         mHomeImageView = (ImageView)view.findViewById(R.id.detail_home_image);
-        //Check for profile title enter shared transition
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mHomeImageView.setTransitionName(Util.getTransitionName(getActivity(), mPosition));
-            getActivity().getWindow().getSharedElementEnterTransition().addListener(new ImageTransitionListener() {
-                @Override
-                public void onTransitionEnd(Transition transition) {
-
-                    //End of transition, fade in days of week row
-                    mHomeNameTextView.animate().setDuration(TEXT_FADE_DURATION).alpha(1f);
-                }
-
-                @Override
-                public void onTransitionStart(Transition transition) {
-                    //Start of transition, make days of week row invisible
-                    mHomeNameTextView.setAlpha(0f);
-                }
-            });
-        }
-
-        //Get CollapsingToolbarLayout
-        mCollapsingToolbarLayout = (CollapsingToolbarLayout)view.findViewById(R.id.collapsing_toolbar);
-
-        Picasso.with(getActivity()).load(mHome.getImageUrl()).into(mHomeImageView, new com.squareup.picasso.Callback() {
-                    @Override
-                    public void onSuccess() {
-                        Log.e(TAG,"Picasso Callback. Finished loading image. ");
-                        Bitmap bitmap = ((BitmapDrawable)mHomeImageView.getDrawable()).getBitmap();
-                        Palette p = Palette.generate(bitmap, 12);
-                        mMutedColor = p.getDarkMutedColor(0xFF333333);
-
-                        //Set title and colors for collapsing toolbar
-                        mCollapsingToolbarLayout.setTitle(mHome.getName());
-                        mCollapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
-
-                        //Set content descriptioni for toolbar/title
-                        mCollapsingToolbarLayout.setContentDescription(mHome.getName());
-
-                        //Set pallet colors when toolbar is collapsed
-                        int primaryColor = getResources().getColor(R.color.colorPrimary);
-                        int primaryDarkColor = getResources().getColor(R.color.colorPrimaryDark);
-                        mCollapsingToolbarLayout.setContentScrimColor(p.getMutedColor(primaryColor));
-                        mCollapsingToolbarLayout.setStatusBarScrimColor(p.getDarkMutedColor(primaryDarkColor));
-
-                        //Now that we've successfully loaded the image, we can start the
-                        //shared transition.
-                        getActivity().supportStartPostponedEnterTransition();
-                    }
-
-                    @Override
-                    public void onError() {
-
-                    }
-                });
-
+        mHomeImageView = (ImageView)view.findViewById(R.id.detail_home_image);
         mHomeNameTextView = (TextView)view.findViewById(R.id.detail_home_name);
         mHomeNameTextView.setText(mHome.getName());
 
+        //Check for profile title enter shared transition
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mHomeImageView.setTransitionName(Util.getTransitionName(getActivity(), mPosition));
+            //Don't bother doing animations on pager fragments that are not displayed.
+            if(mIsTransitioning) {
+                getActivity().getWindow().getSharedElementEnterTransition().addListener(new ImageTransitionListener() {
+                    @Override
+                    public void onTransitionEnd(Transition transition) {
+
+                        //End of transition, fade in days of week row
+                        Log.e(TAG, "onTransitionsEnd()");
+                        mHomeNameTextView.animate().setDuration(TEXT_FADE_DURATION).alpha(1f);
+                    }
+
+                    @Override
+                    public void onTransitionStart(Transition transition) {
+                        //Start of transition, make days of week row invisible
+                        Log.e(TAG, "onTransitionStart()");
+                        mHomeNameTextView.setAlpha(0f);
+                    }
+                });
+            }
+        }
 
         TextView ownerTextView = (TextView)view.findViewById(R.id.detail_owner_text_view);
         ownerTextView.setText(getSpannedString(getString(R.string.detail_header_owner),mHome.getOwners()));
@@ -174,6 +156,8 @@ public class FeaturedHomeDetailFragment extends Fragment {
         TextView sectionTextView = (TextView)view.findViewById(R.id.detail_section_text_view);
         sectionTextView.setText(getSpannedString(getString(R.string.detail_header_section),mHome.getSection()));
 
+        TextView descriptionTextView = (TextView)view.findViewById(R.id.detail_description_text_view);
+        descriptionTextView.setText(getSpannedString(getString(R.string.detail_header_description),getString(R.string.main_about_desc)));
 
         view.findViewById(R.id.map_fab).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,9 +165,65 @@ public class FeaturedHomeDetailFragment extends Fragment {
 
             }
         });
+
+        //Get CollapsingToolbarLayout
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout)view.findViewById(R.id.collapsing_toolbar);
+
+        Picasso.with(getActivity()).load(mHome.getImageUrl()).into(mHomeImageView, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.e(TAG,"Picasso Callback. Finished loading image. ");
+                        Bitmap bitmap = ((BitmapDrawable)mHomeImageView.getDrawable()).getBitmap();
+                        if(bitmap != null) {
+                            Palette p = Palette.generate(bitmap, 12);
+                            mMutedColor = p.getDarkMutedColor(0xFF333333);
+
+                            //Set title and colors for collapsing toolbar
+                            mCollapsingToolbarLayout.setTitle(mHome.getName());
+                            mCollapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
+
+                            //Set content descriptioni for toolbar/title
+                            mCollapsingToolbarLayout.setContentDescription(mHome.getName());
+
+                            //Set pallet colors when toolbar is collapsed
+                            int primaryColor = getResources().getColor(R.color.colorPrimary);
+                            int primaryDarkColor = getResources().getColor(R.color.colorPrimaryDark);
+                            mCollapsingToolbarLayout.setContentScrimColor(p.getMutedColor(primaryColor));
+                            mCollapsingToolbarLayout.setStatusBarScrimColor(p.getDarkMutedColor(primaryDarkColor));
+
+                            //Now that we've successfully loaded the image, we can start the
+                            //shared transition.
+                            Log.e(TAG,"onSuccess() Start Postpone transition with trans name = " + mHomeImageView.getTransitionName());
+                           // getActivity().supportStartPostponedEnterTransition();
+                            startPostponedEnterTransition();
+                        }
+                    }
+
+                    @Override
+                    public void onError() {
+                           Log.e(TAG,"onError()!! Failed with picasso image loading");
+                    }
+                });
+
+
+
         return view;
     }
 
+    private void startPostponedEnterTransition() {
+        if (mPosition == mStartingPosition) {
+            mHomeImageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    Log.e(TAG,"onPreDraw(): Start postponed enter transition!!!!");
+                    mHomeImageView.getViewTreeObserver().removeOnPreDrawListener(this);
+                    getActivity().supportStartPostponedEnterTransition();
+                    return true;
+                }
+            });
+        }
+
+    }
     private Spanned getSpannedString(String heading, String body) {
 
         return Html.fromHtml("<b>" + heading + "</b>" + " " + body);
@@ -193,6 +233,7 @@ public class FeaturedHomeDetailFragment extends Fragment {
         super.onSaveInstanceState(outState);
         Log.e(TAG,"onSaveInstanceState()");
         outState.putInt(ARG_IMAGE_POSITION,mPosition);
+        outState.putInt(ARG_IMAGE_STARTING_POSITION,mStartingPosition);
         outState.putParcelable(ARG_HOME,mHome);
     }
     // TODO: Rename method, update argument and hook method into UI event
