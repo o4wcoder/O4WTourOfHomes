@@ -2,10 +2,13 @@ package com.fourthwardmobile.o4wtourofhomes.fragments;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.graphics.Palette;
@@ -128,16 +131,13 @@ public class FeaturedHomeDetailFragment extends Fragment {
                 getActivity().getWindow().getSharedElementEnterTransition().addListener(new ImageTransitionListener() {
                     @Override
                     public void onTransitionEnd(Transition transition) {
-
                         //End of transition, fade in days of week row
-                        Log.e(TAG, "onTransitionsEnd()");
                         mHomeNameTextView.animate().setDuration(TEXT_FADE_DURATION).alpha(1f);
                     }
 
                     @Override
                     public void onTransitionStart(Transition transition) {
                         //Start of transition, make days of week row invisible
-                        Log.e(TAG, "onTransitionStart()");
                         mHomeNameTextView.setAlpha(0f);
                     }
                 });
@@ -157,7 +157,7 @@ public class FeaturedHomeDetailFragment extends Fragment {
         sectionTextView.setText(getSpannedString(getString(R.string.detail_header_section),mHome.getSection()));
 
         TextView descriptionTextView = (TextView)view.findViewById(R.id.detail_description_text_view);
-        descriptionTextView.setText(getSpannedString(getString(R.string.detail_header_description),getString(R.string.main_about_desc)));
+        descriptionTextView.setText(getString(R.string.main_about_desc));
 
         view.findViewById(R.id.map_fab).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,7 +172,7 @@ public class FeaturedHomeDetailFragment extends Fragment {
         Picasso.with(getActivity()).load(mHome.getImageUrl()).into(mHomeImageView, new com.squareup.picasso.Callback() {
                     @Override
                     public void onSuccess() {
-                        Log.e(TAG,"Picasso Callback. Finished loading image. ");
+                      //  Log.e(TAG,"Picasso Callback. Finished loading image. ");
                         Bitmap bitmap = ((BitmapDrawable)mHomeImageView.getDrawable()).getBitmap();
                         if(bitmap != null) {
                             Palette p = Palette.generate(bitmap, 12);
@@ -193,7 +193,7 @@ public class FeaturedHomeDetailFragment extends Fragment {
 
                             //Now that we've successfully loaded the image, we can start the
                             //shared transition.
-                            Log.e(TAG,"onSuccess() Start Postpone transition with trans name = " + mHomeImageView.getTransitionName());
+                           // Log.e(TAG,"onSuccess() Start Postpone transition with trans name = " + mHomeImageView.getTransitionName());
                            // getActivity().supportStartPostponedEnterTransition();
                             startPostponedEnterTransition();
                         }
@@ -205,11 +205,13 @@ public class FeaturedHomeDetailFragment extends Fragment {
                     }
                 });
 
-
-
         return view;
     }
 
+    /**
+     * Start the postponed shared transition once we know that the imageview it will reside has
+     * been properly measured and laid out.
+     */
     private void startPostponedEnterTransition() {
         if (mPosition == mStartingPosition) {
             mHomeImageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -217,6 +219,9 @@ public class FeaturedHomeDetailFragment extends Fragment {
                 public boolean onPreDraw() {
                     Log.e(TAG,"onPreDraw(): Start postponed enter transition!!!!");
                     mHomeImageView.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                    //Must call this inside a PreDrawListener or the Enter Transition will not work
+                    //Need to make sure imageview is ready before starting transition.
                     getActivity().supportStartPostponedEnterTransition();
                     return true;
                 }
@@ -235,6 +240,34 @@ public class FeaturedHomeDetailFragment extends Fragment {
         outState.putInt(ARG_IMAGE_POSITION,mPosition);
         outState.putInt(ARG_IMAGE_STARTING_POSITION,mStartingPosition);
         outState.putParcelable(ARG_HOME,mHome);
+    }
+
+    /*******************************************************************************/
+    /*                           Private Methods                                   */
+    /*******************************************************************************/
+    /**
+     * Returns true if {@param view} is contained within {@param container}'s bounds.
+     */
+    private static boolean isViewInBounds(@NonNull View container, @NonNull View view) {
+        Rect containerBounds = new Rect();
+        container.getHitRect(containerBounds);
+        return view.getLocalVisibleRect(containerBounds);
+    }
+
+    /*******************************************************************************/
+    /*                           Public Methods                                    */
+    /*******************************************************************************/
+    /**
+     * returns the shared image or null if it's not visible
+     * @return shared imageview
+     */
+    @Nullable
+    public ImageView getSharedImage() {
+        if(isViewInBounds(getActivity().getWindow().getDecorView(),mHomeImageView)) {
+            return mHomeImageView;
+        }
+
+        return null;
     }
     // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {

@@ -52,9 +52,9 @@ public class FeaturedHomeListAdapter extends RecyclerView.Adapter<FeaturedHomeLi
     @Override
     public void onBindViewHolder(FeaturedHomeListAdapterViewHolder holder, int position) {
 
-        Log.e(TAG, "Bind image = " + mHomeList.get(position).getImageUrl());
         Picasso.with(mContext).load(mHomeList.get(position).getImageUrl()).into(holder.thumbnailImageView);
         ViewCompat.setTransitionName(holder.thumbnailImageView, Util.getTransitionName(mContext, position));
+        holder.thumbnailImageView.setTag(Util.getTransitionName(mContext,position));
     }
 
     @Override
@@ -80,7 +80,6 @@ public class FeaturedHomeListAdapter extends RecyclerView.Adapter<FeaturedHomeLi
         @Override
         public void onClick(View v) {
 
-            Log.e(TAG,"HomeListAdapterViewHolder() onClick()");
           mClickHandler.onClick(getAdapterPosition(),this);
         }
     }

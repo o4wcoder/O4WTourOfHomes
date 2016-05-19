@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.SharedElementCallback;
 import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -42,6 +43,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Constants, HomeFragment.OnFragmentCallback {
@@ -69,14 +71,65 @@ public class MainActivity extends AppCompatActivity
     NavigationView mNavigationView;
     private ArrayList<Home> mHomeList = null;
     boolean mIsFirstTime = true;
+    //Used for passedback data after a return transition
+    private Bundle mTmpReenterState;
+
+    private FeaturedHomeListFragment mHomeListFragment;
 
 
     private ImageView mTicketImageView;
+
+    /**
+     * Need a shared element callback for return transition. We need to see if the pager
+     * has been swiped since the enter transition and the image has changed on return
+     */
+    private final SharedElementCallback mCallback = new SharedElementCallback() {
+        @Override
+        public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+
+            if(mTmpReenterState != null) {
+                int startingPosition = mTmpReenterState.getInt(EXTRA_HOME_POSITION);
+                int currentPosition = mTmpReenterState.getInt(EXTRA_CURRENT_HOME_POSITION);
+                
+                if(startingPosition != currentPosition) {
+                    //User has swipped the pager to a different fragment. Need to update the
+                    //shared element transition name for return trip
+                    String newTransitionName = Util.getTransitionName(getApplicationContext(),currentPosition);
+                    if(mHomeListFragment != null) {
+
+                        View newSharedElement = mHomeListFragment.getRecyclerView().findViewWithTag(newTransitionName);
+                        if(newSharedElement != null) {
+
+                            names.clear();
+                            names.add(newTransitionName);
+                            sharedElements.clear();
+                            sharedElements.put(newTransitionName,newSharedElement);
+                        }
+                    }
+                }
+
+                mTmpReenterState = null;
+            } else {
+                //Activity is exiting
+                View navigationBar = findViewById(android.R.id.navigationBarBackground);
+                View statusBar = findViewById(android.R.id.statusBarBackground);
+                if (navigationBar != null) {
+                    names.add(navigationBar.getTransitionName());
+                    sharedElements.put(navigationBar.getTransitionName(), navigationBar);
+                }
+                if (statusBar != null) {
+                    names.add(statusBar.getTransitionName());
+                    sharedElements.put(statusBar.getTransitionName(), statusBar);
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setExitSharedElementCallback(mCallback);
         Log.e(TAG, "onCreate()");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -175,6 +228,7 @@ public class MainActivity extends AppCompatActivity
             fragment = HomeFragment.newInstance();
         } else if (id == R.id.nav_featured_homes) {
             fragment = FeaturedHomeListFragment.newInstance(mHomeList);
+            mHomeListFragment = (FeaturedHomeListFragment)fragment;
 
         } else if (id == R.id.nav_map) {
             fragment = MapHomeFragment.newInstance(mHomeList, Util.getFourthWardParkLocation());
@@ -191,6 +245,27 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public void onActivityReenter(int requestCode, Intent data) {
+        super.onActivityReenter(requestCode, data);
+        Log.e(TAG, "onActivityReenter() ");
+
+        if(requestCode == RESULT_OK) {
+            Log.e(TAG, "onActivityReenter() got result ok");
+            if(data != null) {
+                Log.e(TAG, "onActivityReenter. Got some data!!");
+                mTmpReenterState = new Bundle(data.getExtras());
+                int startingPosition = mTmpReenterState.getInt(EXTRA_HOME_POSITION);
+                int currentPosition = mTmpReenterState.getInt(EXTRA_CURRENT_HOME_POSITION);
+                Log.e(TAG, "onActivityReenter() Got starting pos = " + startingPosition +
+                        " current pos = " + currentPosition);
+            }
+        }
+
+    }
+    /***************************************************************************************/
+    /*                                  Private Methods                                    */
+    /***************************************************************************************/
     private void updateFragment(Fragment fragment) {
         if (fragment != null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.SharedElementCallback;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -23,6 +24,8 @@ import com.fourthwardmobile.o4wtourofhomes.interfaces.Constants;
 import com.fourthwardmobile.o4wtourofhomes.models.Home;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,7 +52,7 @@ public class FeaturedHomeListFragment extends Fragment implements Constants{
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    //private OnFragmentInteractionListener mListener;
+
 
     public FeaturedHomeListFragment() {
         // Required empty public constructor
@@ -75,9 +78,12 @@ public class FeaturedHomeListFragment extends Fragment implements Constants{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e(TAG,"onCreate()");
         if (getArguments() != null) {
             mHomeList = getArguments().getParcelableArrayList(ARG_HOME_LIST);
         }
+        Log.e(TAG,"onCreate() setExitSharedElementCallback");
+
     }
 
     @Override
@@ -85,7 +91,7 @@ public class FeaturedHomeListFragment extends Fragment implements Constants{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_featured_home_list, container, false);
-
+        Log.e(TAG,"onCreateView()");
         mRecyclerView = (RecyclerView)view.findViewById(R.id.home_list_recycler_view);
         //Create Grid with 2 columns
         //mLayoutManager = new GridLayoutManager(getContext(),2);
@@ -130,13 +136,11 @@ public class FeaturedHomeListFragment extends Fragment implements Constants{
         return view;
     }
 
-//    @Override
-//    public void onActivityCreated(Bundle savedInstanceState) {
-//
-//        getActivity().supportPostponeEnterTransition();
-//
-//        super.onActivityCreated(savedInstanceState);
-//    }
+
+    public RecyclerView getRecyclerView() {
+
+        return mRecyclerView;
+    }
 
 
 

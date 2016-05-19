@@ -101,6 +101,9 @@
         <TextView
             style="@style/DetailTextView"
             android:id="@+id/detail_section_text_view"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
         <TextView
             style="@style/DetailTextView"
             android:id="@+id/detail_description_text_view"/>
