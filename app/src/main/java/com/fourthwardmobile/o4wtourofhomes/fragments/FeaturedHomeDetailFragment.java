@@ -131,7 +131,6 @@ public class FeaturedHomeDetailFragment extends Fragment implements Constants{
         mHomeNameTextView.setText(mHome.getName());
 
         mMapFAB = (FloatingActionButton) view.findViewById(R.id.map_fab);
-        mMapFAB.setAlpha(0f);
         mMapFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

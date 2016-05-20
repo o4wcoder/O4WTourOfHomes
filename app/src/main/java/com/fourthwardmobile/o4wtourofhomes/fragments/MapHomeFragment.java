@@ -1,5 +1,6 @@
 package com.fourthwardmobile.o4wtourofhomes.fragments;
 
+import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -27,6 +29,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -154,6 +157,8 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
             //Listen for Marker clicks
             mGoogleMap.setOnMarkerClickListener(this);
             mGoogleMap.setOnMapLoadedCallback(this);
+            //Set window adapter so we can create a custom window with and image
+            mGoogleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
 
             setMapPadding();
 
@@ -211,5 +216,72 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
 //                .translationY(120)
 //                .setDuration(500);
 
+    }
+
+    /********************************************************************************************/
+    /*                                   Inner Classes                                          */
+    /********************************************************************************************/
+
+    public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
+
+        private final View mWindow;
+       // private int mHomePosition;
+        private Marker mCurrentMarker;
+        CustomInfoWindowAdapter() {
+
+          //  mHomePosition = homePosition;
+
+            mWindow = getLayoutInflater(null).inflate(R.layout.map_marker_image,null);
+
+        }
+        @Override
+        public View getInfoWindow(final Marker marker) {
+            Log.e(TAG,"getInfoWindow()");
+            render(marker,mWindow);
+            return mWindow;
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+
+            if(mCurrentMarker != null &&
+                    mCurrentMarker.isInfoWindowShown()){
+                mCurrentMarker.hideInfoWindow();
+                mCurrentMarker.showInfoWindow();
+            }
+            return null;
+        }
+
+        private void render(final Marker marker, View view) {
+            mCurrentMarker = marker;
+            mCurrentMarker.hideInfoWindow();
+            final ImageView markerImage = (ImageView)view.findViewById(R.id.map_marker_image_view);
+            Log.e(TAG,"render() with marker id = " + marker.getId());
+
+            try {
+                String strId = marker.getId().substring(1, 2);
+                Log.e(TAG,"render() Got string ID = " + strId);
+                int index = Integer.parseInt(strId);
+
+                Log.e(TAG,"render() Loading image at " + mHomeList.get(index).getImageUrl());
+                Picasso.with(getContext()).load(mHomeList.get(index).getImageUrl()).into(markerImage, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.e(TAG,"render() success loading image");
+                        getInfoContents(marker);
+                    }
+
+                    @Override
+                    public void onError() {
+                        Log.e(TAG,"render() failed loading image");
+                    }
+                });
+
+            } catch (StringIndexOutOfBoundsException e) {
+                Log.e(TAG,"render() Caught StringIndexOutOfBounds Exception " + e.getMessage());
+            }
+
+
+        }
     }
 }

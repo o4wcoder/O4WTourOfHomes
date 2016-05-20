@@ -1,0 +1,10 @@
+
+<ImageView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:adjustViewBounds="true"
+    android:id="@+id/map_marker_image_view"
+    android:background="@drawable/custom_info_bubble">
+
+</ImageView>

@@ -28,6 +28,7 @@ public class MapHomeActivity extends AppCompatActivity implements Constants{
         //Get data passed by activity calling Map outside of the main activity drawer.
         Intent intent = getIntent();
 
+
         if(intent != null) {
             Bundle bundle = new Bundle();
             ArrayList<Home> list = intent.getParcelableArrayListExtra(EXTRA_HOME_LIST);

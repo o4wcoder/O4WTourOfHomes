@@ -112,6 +112,7 @@ public class FeaturedHomeDetailActivity extends AppCompatActivity implements Con
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(EXTRA_CURRENT_HOME_POSITION, mCurrentPosition);
+        outState.putParcelableArrayList(EXTRA_HOME_LIST,mHomeList);
     }
 
     @Override
