@@ -11,4 +11,6 @@
 
     <!--accent colors -->
     <color name="blue_accent">#448AFF</color>
+
+    <color name="white">#ffffff</color>
 </resources>

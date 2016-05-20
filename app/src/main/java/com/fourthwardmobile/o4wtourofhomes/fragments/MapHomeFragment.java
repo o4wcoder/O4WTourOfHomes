@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.fourthwardmobile.o4wtourofhomes.R;
 import com.fourthwardmobile.o4wtourofhomes.helpers.Util;
@@ -23,6 +25,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
@@ -38,7 +41,8 @@ import java.util.List;
  * Use the {@link MapHomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapHomeFragment extends Fragment implements OnMapReadyCallback {
+public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
+        GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLoadedCallback {
 
     /**************************************************************************/
     /*                             Constants                                  */
@@ -55,6 +59,8 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback {
     private ArrayList<Home> mHomeList;
     private GoogleMap mGoogleMap;
     private MapView mMapView;
+    private TextView mAddressTextView;
+    private LinearLayout mAddressPanel;
 
 
    // private OnFragmentInteractionListener mListener;
@@ -104,28 +110,12 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback {
 
         mMapView.getMapAsync(this);
 
+        mAddressPanel = (LinearLayout)view.findViewById(R.id.map_address_panel);
+        mAddressPanel.setVisibility(View.GONE);
+        mAddressTextView = (TextView)view.findViewById(R.id.map_address_text_view);
+
         return view;
     }
-
-//    @Override
-//    public void onActivityCreated(Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//
-//        Log.e(TAG,"onActivityCreate()");
-//        if(savedInstanceState != null) {
-//            Log.e(TAG,"onActivityCreate() get local data");
-//            mZoomLocation = savedInstanceState.getParcelable(ARG_LOCATION);
-//            mHomeList = savedInstanceState.getParcelableArrayList(ARG_HOME_LIST);
-//        }
-//    }
-
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        Log.e(TAG,"onSaveInstanceState()");
-//        outState.putParcelable(ARG_LOCATION,mZoomLocation);
-//        outState.putParcelableArrayList(ARG_HOME_LIST,mHomeList);
-//    }
 
     @Override
     public void onResume() {
@@ -161,6 +151,11 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback {
         if(mGoogleMap != null) {
             mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
+            //Listen for Marker clicks
+            mGoogleMap.setOnMarkerClickListener(this);
+            mGoogleMap.setOnMapLoadedCallback(this);
+
+            setMapPadding();
 
             for(int i = 0; i < mHomeList.size(); i++) {
 
@@ -178,6 +173,12 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    private void setMapPadding() {
+
+        int height = mAddressPanel.getMeasuredHeight();
+        Log.e(TAG,"address panel height = " + height);
+        mGoogleMap.setPadding(0,0,0,height - 16);
+    }
     private void addMarker(Home home) {
 
         if(home.getLocation() != null) {
@@ -192,65 +193,23 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
+    @Override
+    public boolean onMarkerClick(Marker marker) {
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
+        mAddressTextView.setText(marker.getTitle());
 
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
+        return false;
+    }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        void onFragmentInteraction(Uri uri);
-//    }
+    @Override
+    public void onMapLoaded() {
 
-//    @Override
-//    public void onDestroyView() {
-//        super.onDestroyView();
-//        Log.e(TAG,"onDestroyView()");
-//
-//        /**
-//         * Remove child Map Framgment when we leave the parent fragment. If not,
-//         * it will crash when we return.
-//         */
-//        android.app.Fragment fragment = getActivity().getFragmentManager()
-//                .findFragmentById(R.id.map);
-//        if (null != fragment) {
-//            Log.e(TAG,"onDestroyView() remove map fragment");
-//            android.app.FragmentTransaction ft = getActivity()
-//                    .getFragmentManager().beginTransaction();
-//            ft.remove(fragment);
-//            ft.commit();
-//        }
-//    }
+        Log.e(TAG,"onMapLoaded()");
+        mAddressPanel.setVisibility(View.VISIBLE);
+//        mAddressPanel.animate()
+//                .translationYBy(0)
+//                .translationY(120)
+//                .setDuration(500);
 
-
-
+    }
 }

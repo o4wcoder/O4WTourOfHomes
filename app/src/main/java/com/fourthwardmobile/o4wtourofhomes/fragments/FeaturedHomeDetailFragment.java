@@ -1,6 +1,7 @@
 package com.fourthwardmobile.o4wtourofhomes.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
@@ -25,10 +27,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fourthwardmobile.o4wtourofhomes.R;
+import com.fourthwardmobile.o4wtourofhomes.activities.MapHomeActivity;
 import com.fourthwardmobile.o4wtourofhomes.helpers.ImageTransitionListener;
 import com.fourthwardmobile.o4wtourofhomes.helpers.Util;
+import com.fourthwardmobile.o4wtourofhomes.interfaces.Constants;
 import com.fourthwardmobile.o4wtourofhomes.models.Home;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,7 +44,7 @@ import com.squareup.picasso.Picasso;
  * Use the {@link FeaturedHomeDetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FeaturedHomeDetailFragment extends Fragment {
+public class FeaturedHomeDetailFragment extends Fragment implements Constants{
 
     /************************************************************************************/
     /*                                  Constants                                       */
@@ -61,6 +67,7 @@ public class FeaturedHomeDetailFragment extends Fragment {
 
     private TextView mHomeNameTextView;
     ImageView mHomeImageView;
+    FloatingActionButton mMapFAB;
     boolean mIsTransitioning;
 
    // private OnFragmentInteractionListener mListener;
@@ -123,6 +130,19 @@ public class FeaturedHomeDetailFragment extends Fragment {
         mHomeNameTextView = (TextView)view.findViewById(R.id.detail_home_name);
         mHomeNameTextView.setText(mHome.getName());
 
+        mMapFAB = (FloatingActionButton) view.findViewById(R.id.map_fab);
+        mMapFAB.setAlpha(0f);
+        mMapFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getActivity(), MapHomeActivity.class);
+                intent.putParcelableArrayListExtra(EXTRA_HOME_LIST, ((OnFragmentCallback) getActivity()).getHomeList());
+                intent.putExtra(EXTRA_LOCATION, mHome.getLocation());
+                startActivity(intent);
+            }
+        });
+
         //Check for profile title enter shared transition
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mHomeImageView.setTransitionName(Util.getTransitionName(getActivity(), mPosition));
@@ -131,14 +151,18 @@ public class FeaturedHomeDetailFragment extends Fragment {
                 getActivity().getWindow().getSharedElementEnterTransition().addListener(new ImageTransitionListener() {
                     @Override
                     public void onTransitionEnd(Transition transition) {
-                        //End of transition, fade in days of week row
+                        //End of transition, fade in views
                         mHomeNameTextView.animate().setDuration(TEXT_FADE_DURATION).alpha(1f);
+                        mMapFAB.animate().setDuration(TEXT_FADE_DURATION).alpha(1f);
+                        Log.e(TAG,"onTransitionEnd() ");
                     }
 
                     @Override
                     public void onTransitionStart(Transition transition) {
-                        //Start of transition, make days of week row invisible
+                        //Start of transition, make views invisible
                         mHomeNameTextView.setAlpha(0f);
+                        mMapFAB.setAlpha(0f);
+                        Log.e(TAG,"onTransitionStart()");
                     }
                 });
             }
@@ -159,12 +183,7 @@ public class FeaturedHomeDetailFragment extends Fragment {
         TextView descriptionTextView = (TextView)view.findViewById(R.id.detail_description_text_view);
         descriptionTextView.setText(getString(R.string.main_about_desc));
 
-        view.findViewById(R.id.map_fab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
 
         //Get CollapsingToolbarLayout
         mCollapsingToolbarLayout = (CollapsingToolbarLayout)view.findViewById(R.id.collapsing_toolbar);
@@ -269,12 +288,8 @@ public class FeaturedHomeDetailFragment extends Fragment {
 
         return null;
     }
-    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
+
+
 //
 //    @Override
 //    public void onAttach(Context context) {
@@ -311,6 +326,7 @@ public class FeaturedHomeDetailFragment extends Fragment {
     public interface  OnFragmentCallback {
 
         Home getHome(int position);
+        ArrayList<Home> getHomeList();
     }
 
     public interface OnImageLoadingCallback {

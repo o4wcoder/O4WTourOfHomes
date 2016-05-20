@@ -135,6 +135,11 @@ public class FeaturedHomeDetailActivity extends AppCompatActivity implements Con
             return null;
     }
 
+    @Override
+    public ArrayList<Home> getHomeList() {
+        return mHomeList;
+    }
+
     /***************************************************************************************/
     /*                                 Inner Classes                                       */
     /***************************************************************************************/
