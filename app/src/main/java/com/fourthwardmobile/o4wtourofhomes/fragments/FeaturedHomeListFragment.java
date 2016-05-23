@@ -124,14 +124,6 @@ public class FeaturedHomeListFragment extends Fragment implements Constants{
         //Set the adapter for the RecyclerView;
         mRecyclerView.setAdapter(mAdapter);
 
-//        mRecyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-//            @Override
-//            public boolean onPreDraw() {
-//                getActivity().supportStartPostponedEnterTransition();
-//                return true;
-//            }
-//        });
-
         Log.e(TAG,"onCreateView() Got home list count = " + mHomeList.size());
         return view;
     }
