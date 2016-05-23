@@ -211,8 +211,6 @@ public class FeaturedHomeDetailFragment extends Fragment implements Constants{
 
                             //Now that we've successfully loaded the image, we can start the
                             //shared transition.
-                           // Log.e(TAG,"onSuccess() Start Postpone transition with trans name = " + mHomeImageView.getTransitionName());
-                           // getActivity().supportStartPostponedEnterTransition();
                             startPostponedEnterTransition();
                         }
                     }
