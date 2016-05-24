@@ -1,6 +1,7 @@
 package com.fourthwardmobile.o4wtourofhomes.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -10,12 +11,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fourthwardmobile.o4wtourofhomes.R;
+import com.fourthwardmobile.o4wtourofhomes.activities.FeaturedHomeDetailActivity;
 import com.fourthwardmobile.o4wtourofhomes.helpers.Util;
+import com.fourthwardmobile.o4wtourofhomes.interfaces.Constants;
 import com.fourthwardmobile.o4wtourofhomes.models.Home;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -45,7 +49,8 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
-        GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLoadedCallback {
+        GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLoadedCallback, GoogleMap.OnInfoWindowClickListener,
+        Constants{
 
     /**************************************************************************/
     /*                             Constants                                  */
@@ -159,6 +164,8 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
             mGoogleMap.setOnMapLoadedCallback(this);
             //Set window adapter so we can create a custom window with and image
             mGoogleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
+            //Set up click events on Info Window(Picture of Home)
+            mGoogleMap.setOnInfoWindowClickListener(this);
 
             setMapPadding();
 
@@ -176,26 +183,6 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mZoomLocation,15));
 
         }
-    }
-
-    private void setMapPadding() {
-
-        int height = mAddressPanel.getMeasuredHeight();
-        Log.e(TAG,"address panel height = " + height);
-        mGoogleMap.setPadding(0,0,0,height - 16);
-    }
-    private void addMarker(Home home) {
-
-        if(home.getLocation() != null) {
-            MarkerOptions options = new MarkerOptions()
-                    .position(home.getLocation())
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
-                    .title(home.getName());
-
-            mGoogleMap.addMarker(options);
-        }
-
-
     }
 
     @Override
@@ -217,6 +204,56 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
 //                .setDuration(500);
 
     }
+
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Log.e(TAG,"onInfoWindowClick() with marker id = " + marker.getId());
+
+        int index = getHomePositionFromMarker(marker);
+
+        Intent intent = new Intent(getActivity(), FeaturedHomeDetailActivity.class);
+
+        intent.putExtra(EXTRA_HOME_POSITION,index);
+        intent.putParcelableArrayListExtra(EXTRA_HOME_LIST,mHomeList);
+        startActivity(intent);
+
+
+
+    }
+    /*********************************************************************************************/
+    /*                                     Private Methods                                       */
+    /*********************************************************************************************/
+    private void setMapPadding() {
+
+        int height = mAddressPanel.getMeasuredHeight();
+        Log.e(TAG,"address panel height = " + height);
+        mGoogleMap.setPadding(0,0,0,height - 16);
+    }
+    private void addMarker(Home home) {
+
+        if(home.getLocation() != null) {
+            MarkerOptions options = new MarkerOptions()
+                    .position(home.getLocation())
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                    .title(home.getName());
+
+            mGoogleMap.addMarker(options);
+        }
+
+
+    }
+
+    private int getHomePositionFromMarker(Marker marker) {
+
+        String strId = marker.getId().substring(1, 2);
+        int index = Integer.parseInt(strId);
+
+        return index;
+    }
+
+
+
 
     /********************************************************************************************/
     /*                                   Inner Classes                                          */
@@ -255,20 +292,21 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
         private void render(final Marker marker, View view) {
             mCurrentMarker = marker;
             mCurrentMarker.hideInfoWindow();
+
             final ImageView markerImage = (ImageView)view.findViewById(R.id.map_marker_image_view);
+
             Log.e(TAG,"render() with marker id = " + marker.getId());
 
             try {
-                String strId = marker.getId().substring(1, 2);
-                Log.e(TAG,"render() Got string ID = " + strId);
-                int index = Integer.parseInt(strId);
-
+                //Get the home that this marker points to.
+                int index = getHomePositionFromMarker(marker);
                 Log.e(TAG,"render() Loading image at " + mHomeList.get(index).getImageUrl());
                 Picasso.with(getContext()).load(mHomeList.get(index).getImageUrl()).into(markerImage, new com.squareup.picasso.Callback() {
                     @Override
                     public void onSuccess() {
                         Log.e(TAG,"render() success loading image");
                         getInfoContents(marker);
+
                     }
 
                     @Override
