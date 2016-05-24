@@ -40,4 +40,5 @@ public class MapHomeActivity extends AppCompatActivity implements Constants{
                     .add(R.id.map_single_home_container,fragment).commit();
         }
     }
+
 }

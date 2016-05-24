@@ -29,7 +29,8 @@
 
         <activity
             android:name=".activities.FeaturedHomeDetailActivity"
-            android:theme="@style/AppTheme.Details">
+            android:theme="@style/AppTheme.Details"
+            android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />

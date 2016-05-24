@@ -79,22 +79,24 @@ public class FeaturedHomeDetailActivity extends AppCompatActivity implements Con
 //        }
 
         setContentView(R.layout.activity_home_detail);
-
+        Log.e(TAG,"onCreate()");
         supportPostponeEnterTransition();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setEnterSharedElementCallback(mCallback);
         }
 
-
-        mStartingPosition = getIntent().getIntExtra(EXTRA_HOME_POSITION,0);
-        mHomeList = getIntent().getParcelableArrayListExtra(EXTRA_HOME_LIST);
-
         //Current pager position is the starting one when activity created
         if(savedInstanceState == null) {
+            Log.e(TAG,"onCreate(): Get data from intent");
+            mStartingPosition = getIntent().getIntExtra(EXTRA_HOME_POSITION,0);
+            mHomeList = getIntent().getParcelableArrayListExtra(EXTRA_HOME_LIST);
             mCurrentPosition = mStartingPosition;
         }
         else {
+            Log.e(TAG,"onCreate(): Get saved data");
+            mStartingPosition = savedInstanceState.getInt(EXTRA_HOME_POSITION);
             mCurrentPosition = savedInstanceState.getInt(EXTRA_CURRENT_HOME_POSITION);
+            mHomeList = savedInstanceState.getParcelableArrayList(EXTRA_HOME_LIST);
         }
 
         ViewPager pager = (ViewPager)findViewById(R.id.pager);
@@ -110,9 +112,12 @@ public class FeaturedHomeDetailActivity extends AppCompatActivity implements Con
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
+        Log.e(TAG,"onSaveInstanceState()");
         super.onSaveInstanceState(outState);
+        outState.putInt(EXTRA_HOME_POSITION,mStartingPosition);
         outState.putInt(EXTRA_CURRENT_HOME_POSITION, mCurrentPosition);
         outState.putParcelableArrayList(EXTRA_HOME_LIST,mHomeList);
+
     }
 
     @Override
