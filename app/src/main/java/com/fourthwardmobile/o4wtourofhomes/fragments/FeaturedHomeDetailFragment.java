@@ -167,6 +167,19 @@ public class FeaturedHomeDetailFragment extends Fragment implements Constants{
             }
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+            toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow_back_white, null));
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.e(TAG,"Back pressed");
+
+                    //Kill this activity
+                    getActivity().finish();
+                }
+            });
+        }
         TextView ownerTextView = (TextView)view.findViewById(R.id.detail_owner_text_view);
         ownerTextView.setText(getSpannedString(getString(R.string.detail_header_owner),mHome.getOwners()));
 
