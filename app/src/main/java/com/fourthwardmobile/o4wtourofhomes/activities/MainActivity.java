@@ -30,6 +30,7 @@ import com.fourthwardmobile.o4wtourofhomes.adapters.FeaturedHomeListAdapter;
 import com.fourthwardmobile.o4wtourofhomes.fragments.FeaturedHomeListFragment;
 import com.fourthwardmobile.o4wtourofhomes.fragments.HomeFragment;
 import com.fourthwardmobile.o4wtourofhomes.fragments.MapHomeFragment;
+import com.fourthwardmobile.o4wtourofhomes.fragments.TicketsFragment;
 import com.fourthwardmobile.o4wtourofhomes.helpers.Util;
 import com.fourthwardmobile.o4wtourofhomes.interfaces.Constants;
 import com.fourthwardmobile.o4wtourofhomes.models.Home;
@@ -234,6 +235,7 @@ public class MainActivity extends AppCompatActivity
             fragment = MapHomeFragment.newInstance(mHomeList, Util.getFourthWardParkLocation());
 
         } else if (id == R.id.nav_tickets) {
+            fragment = TicketsFragment.newInstance();
 
         } else if (id == R.id.nav_contact) {
 

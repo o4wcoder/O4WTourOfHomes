@@ -41,4 +41,9 @@
     <string name="detail_header_year_built">YEAR BUILT:</string>
     <string name="detail_header_section">SECTION:</string>
     <string name="detail_header_description">DESCRIPTION:</string>
+
+    <!-- Tickets -->
+    <string name="tickets_not_available">No Tickets Available</string>
+    <string name="tickets_available">Tickets Available at the Link Below!</string>
+    <string name="tickets_notified">You will be notified as soon as they become available!</string>
 </resources>

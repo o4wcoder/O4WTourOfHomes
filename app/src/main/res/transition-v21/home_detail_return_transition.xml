@@ -9,7 +9,6 @@
         </targets>
     </fade>
     <slide android:slideEdge="bottom">
-
         <targets>
             <target android:targetId="@id/home_detail_bottom_panel" />
         </targets>
