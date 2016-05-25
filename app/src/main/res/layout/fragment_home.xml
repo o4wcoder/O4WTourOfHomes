@@ -38,6 +38,42 @@ xmlns:android="http://schemas.android.com/apk/res/android"
                 android:scaleType="fitCenter"
                 android:layout_marginTop="@dimen/activity_vertical_margin"/>
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/sponsors"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:columnCount="2"
+            android:rowCount="4"
+            >
+        <ImageView
+            style="@style/SponsorLogo"
+            android:src="@drawable/ladybird_logo"/>
+        <ImageView
+            style="@style/SponsorLogo"
+            android:src="@drawable/highland_bakery_logo"/>
+        <ImageView
+            style="@style/SponsorLogo"
+            android:src="@drawable/fourthwardpark_logo"/>
+        <ImageView
+            style="@style/SponsorLogo"
+            android:src="@drawable/nonis_logo"/>
+        <ImageView
+            style="@style/SponsorLogo"
+            android:src="@drawable/nandina_logo"/>
+        <ImageView
+            style="@style/SponsorLogo"
+            android:src="@drawable/village_logo"/>
+        <ImageView
+            style="@style/SponsorLogo"
+            android:src="@drawable/wingate_logo"/>
+        </GridLayout>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
 

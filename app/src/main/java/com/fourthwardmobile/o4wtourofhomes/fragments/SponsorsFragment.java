@@ -11,15 +11,14 @@ import com.fourthwardmobile.o4wtourofhomes.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ContactsFragment#newInstance} factory method to
+ * Use the {@link SponsorsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ContactsFragment extends Fragment {
+public class SponsorsFragment extends Fragment {
 
 
 
-
-    public ContactsFragment() {
+    public SponsorsFragment() {
         // Required empty public constructor
     }
 
@@ -27,13 +26,11 @@ public class ContactsFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ContactsFragment.
+     * @return A new instance of fragment SponsorsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ContactsFragment newInstance() {
-        ContactsFragment fragment = new ContactsFragment();
+    public static SponsorsFragment newInstance() {
+        SponsorsFragment fragment = new SponsorsFragment();
         return fragment;
     }
 
@@ -47,7 +44,9 @@ public class ContactsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_contacts, container, false);
+        View view = inflater.inflate(R.layout.fragment_sponsors, container, false);
+
+        return view;
     }
 
 }

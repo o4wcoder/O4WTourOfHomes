@@ -21,7 +21,7 @@
 
     <!-- Main Layout -->
     <string name="main_about_desc">Enjoy the unique charms of the historic Old Fourth Ward this Fall on September 11th from 12pm-5pm. Our annual home tour features a wide variety of incredible living spaces including stunning lofts, classic, and contemporary designs. Whether modernists or traditionalists- you’ll be inspired to start some new decoration projects in your own home. Tour proceeds will benefit Old Fourth Ward neighborhood organizations along with the beautification projects along the Boulevard corridor. We can’t wait to see you on the tour this September 11th!\n\nOn the day of the tour, please come to Historic Old Fourth Ward Park to pick up your tickets. We’ll have a registration booth set up in the green space just off Rankin Street overlooking the large water feature.</string>
-
+    <string name="sponsors">Sponsors</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

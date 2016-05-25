@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -50,7 +52,7 @@ import java.util.List;
  */
 public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLoadedCallback, GoogleMap.OnInfoWindowClickListener,
-        Constants{
+        Constants {
 
     /**************************************************************************/
     /*                             Constants                                  */
@@ -71,7 +73,7 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
     private LinearLayout mAddressPanel;
 
 
-   // private OnFragmentInteractionListener mListener;
+    // private OnFragmentInteractionListener mListener;
 
     public MapHomeFragment() {
         // Required empty public constructor
@@ -89,7 +91,7 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
     public static MapHomeFragment newInstance(ArrayList<Home> homeList, LatLng zoomLocation) {
         MapHomeFragment fragment = new MapHomeFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(ARG_HOME_LIST,homeList);
+        args.putParcelableArrayList(ARG_HOME_LIST, homeList);
         args.putParcelable(ARG_LOCATION, zoomLocation);
         fragment.setArguments(args);
         return fragment;
@@ -99,7 +101,7 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            Log.e(TAG,"onCreate. Getting argument location");
+            Log.e(TAG, "onCreate. Getting argument location");
             mZoomLocation = getArguments().getParcelable(ARG_LOCATION);
             mHomeList = getArguments().getParcelableArrayList(ARG_HOME_LIST);
 
@@ -113,14 +115,14 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home_map, container, false);
 
-        mMapView = (MapView)view.findViewById(R.id.map);
+        mMapView = (MapView) view.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
 
         mMapView.getMapAsync(this);
 
-        mAddressPanel = (LinearLayout)view.findViewById(R.id.map_address_panel);
+        mAddressPanel = (LinearLayout) view.findViewById(R.id.map_address_panel);
         mAddressPanel.setVisibility(View.GONE);
-        mAddressTextView = (TextView)view.findViewById(R.id.map_address_text_view);
+        mAddressTextView = (TextView) view.findViewById(R.id.map_address_text_view);
 
         return view;
     }
@@ -156,7 +158,7 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
         mGoogleMap = googleMap;
 
         //Zoom to location
-        if(mGoogleMap != null) {
+        if (mGoogleMap != null) {
             mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
             //Listen for Marker clicks
@@ -169,18 +171,18 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
 
             setMapPadding();
 
-            for(int i = 0; i < mHomeList.size(); i++) {
+            for (int i = 0; i < mHomeList.size(); i++) {
 
-               addMarker(mHomeList.get(i));
+                addMarker(mHomeList.get(i));
             }
 
-            //Add Fourth Ward Park Market
+            //Add Fourth Ward Park Market Last so it will have an id of mHomeList.size()
             MarkerOptions options = new MarkerOptions()
                     .position(Util.getFourthWardParkLocation())
                     .title(getString(R.string.marker_buy_tickets));
             mGoogleMap.addMarker(options);
 
-            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mZoomLocation,15));
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mZoomLocation, 15));
 
         }
     }
@@ -196,28 +198,32 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onMapLoaded() {
 
-        Log.e(TAG,"onMapLoaded()");
+        Log.e(TAG, "onMapLoaded()");
+
+        //Slide up address view
+        Animation animShow = AnimationUtils.loadAnimation(getActivity(),R.anim.slide_up);
         mAddressPanel.setVisibility(View.VISIBLE);
-//        mAddressPanel.animate()
-//                .translationYBy(0)
-//                .translationY(120)
-//                .setDuration(500);
+        mAddressPanel.startAnimation(animShow);
+
 
     }
 
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Log.e(TAG,"onInfoWindowClick() with marker id = " + marker.getId());
+        Log.e(TAG, "onInfoWindowClick() with marker id = " + marker.getId());
 
         int index = getHomePositionFromMarker(marker);
 
-        Intent intent = new Intent(getActivity(), FeaturedHomeDetailActivity.class);
+        //Only pull up Home Detail activity if this marker is a home in the list and not the ticket
+        //location
+        if(index < mHomeList.size()) {
+            Intent intent = new Intent(getActivity(), FeaturedHomeDetailActivity.class);
 
-        intent.putExtra(EXTRA_HOME_POSITION,index);
-        intent.putParcelableArrayListExtra(EXTRA_HOME_LIST,mHomeList);
-        startActivity(intent);
-
+            intent.putExtra(EXTRA_HOME_POSITION, index);
+            intent.putParcelableArrayListExtra(EXTRA_HOME_LIST, mHomeList);
+            startActivity(intent);
+        }
 
 
     }
@@ -227,12 +233,13 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
     private void setMapPadding() {
 
         int height = mAddressPanel.getMeasuredHeight();
-        Log.e(TAG,"address panel height = " + height);
-        mGoogleMap.setPadding(0,0,0,height - 16);
+        Log.e(TAG, "address panel height = " + height);
+        mGoogleMap.setPadding(0, 0, 0, height - 16);
     }
+
     private void addMarker(Home home) {
 
-        if(home.getLocation() != null) {
+        if (home.getLocation() != null) {
             MarkerOptions options = new MarkerOptions()
                     .position(home.getLocation())
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
@@ -240,49 +247,54 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
 
             mGoogleMap.addMarker(options);
         }
-
-
     }
 
     private int getHomePositionFromMarker(Marker marker) {
 
-        String strId = marker.getId().substring(1, 2);
-        int index = Integer.parseInt(strId);
+        try {
+            String strId = marker.getId().substring(1, 2);
+            int index = Integer.parseInt(strId);
+            return index;
 
-        return index;
+        } catch (StringIndexOutOfBoundsException e) {
+            Log.e(TAG, "render() Caught StringIndexOutOfBounds Exception " + e.getMessage());
+            return -1;
+        }
+
+
     }
-
-
 
 
     /********************************************************************************************/
     /*                                   Inner Classes                                          */
-    /********************************************************************************************/
 
+    /********************************************************************************************/
     public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
         private final View mWindow;
-       // private int mHomePosition;
+        // private int mHomePosition;
         private Marker mCurrentMarker;
+
         CustomInfoWindowAdapter() {
 
-          //  mHomePosition = homePosition;
+            //  mHomePosition = homePosition;
 
-            mWindow = getLayoutInflater(null).inflate(R.layout.map_marker_image,null);
+            mWindow = getLayoutInflater(null).inflate(R.layout.map_marker_image, null);
 
         }
+
         @Override
         public View getInfoWindow(final Marker marker) {
-            Log.e(TAG,"getInfoWindow()");
-            render(marker,mWindow);
+            Log.e(TAG, "getInfoWindow()");
+            render(marker, mWindow);
             return mWindow;
         }
 
         @Override
         public View getInfoContents(Marker marker) {
 
-            if(mCurrentMarker != null &&
-                    mCurrentMarker.isInfoWindowShown()){
+            if (mCurrentMarker != null &&
+                    mCurrentMarker.isInfoWindowShown()) {
                 mCurrentMarker.hideInfoWindow();
                 mCurrentMarker.showInfoWindow();
             }
@@ -293,30 +305,43 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
             mCurrentMarker = marker;
             mCurrentMarker.hideInfoWindow();
 
-            final ImageView markerImage = (ImageView)view.findViewById(R.id.map_marker_image_view);
+            final ImageView markerImage = (ImageView) view.findViewById(R.id.map_marker_image_view);
 
-            Log.e(TAG,"render() with marker id = " + marker.getId());
+            Log.e(TAG, "render() with marker id = " + marker.getId());
 
-            try {
-                //Get the home that this marker points to.
-                int index = getHomePositionFromMarker(marker);
-                Log.e(TAG,"render() Loading image at " + mHomeList.get(index).getImageUrl());
+
+            //Get the home that this marker points to.
+            int index = getHomePositionFromMarker(marker);
+            Log.e(TAG, "render() with index = " + index);
+
+            if (index >= 0 && index < mHomeList.size()) {
+                Log.e(TAG, "render() Loading image at " + mHomeList.get(index).getImageUrl());
                 Picasso.with(getContext()).load(mHomeList.get(index).getImageUrl()).into(markerImage, new com.squareup.picasso.Callback() {
                     @Override
                     public void onSuccess() {
-                        Log.e(TAG,"render() success loading image");
+                        Log.e(TAG, "render() success loading image");
                         getInfoContents(marker);
 
                     }
 
                     @Override
                     public void onError() {
-                        Log.e(TAG,"render() failed loading image");
+                        Log.e(TAG, "render() failed loading image");
                     }
                 });
+            } else if(index >= mHomeList.size()) {
+                Picasso.with(getContext()).load(R.drawable.ticket).into(markerImage, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.e(TAG,"render() success loading image for tickets marker");
+                        getInfoContents(marker);
+                    }
 
-            } catch (StringIndexOutOfBoundsException e) {
-                Log.e(TAG,"render() Caught StringIndexOutOfBounds Exception " + e.getMessage());
+                    @Override
+                    public void onError() {
+                        Log.e(TAG, "render() failed loading ticket image");
+                    }
+                });
             }
 
 

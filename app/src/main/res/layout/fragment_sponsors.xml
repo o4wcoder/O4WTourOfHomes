@@ -1,0 +1,63 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp"
+    tools:context="com.fourthwardmobile.o4wtourofhomes.fragments.SponsorsFragment">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="1">
+
+        <LinearLayout style="@style/SponsorLayout">
+
+            <ImageView
+                style="@style/SponsorLogo"
+                android:src="@drawable/ladybird_logo" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/SponsorLayout">
+
+            <ImageView
+                style="@style/SponsorLogo"
+                android:src="@drawable/highland_bakery_logo" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/SponsorLayout">
+
+            <ImageView
+                style="@style/SponsorLogo"
+                android:src="@drawable/fourthwardpark_logo" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/SponsorLayout">
+
+            <ImageView
+                style="@style/SponsorLogo"
+                android:src="@drawable/nonis_logo" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/SponsorLayout">
+
+            <ImageView
+                style="@style/SponsorLogo"
+                android:src="@drawable/nandina_logo" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/SponsorLayout">
+
+            <ImageView
+                style="@style/SponsorLogo"
+                android:src="@drawable/village_logo" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/SponsorLayout">
+
+            <ImageView
+                style="@style/SponsorLogo"
+                android:src="@drawable/wingate_logo" />
+        </LinearLayout>
+    </GridLayout>
+
+</ScrollView>
