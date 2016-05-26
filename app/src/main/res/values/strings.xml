@@ -46,4 +46,16 @@
     <string name="tickets_not_available">No Tickets Available</string>
     <string name="tickets_available">Tickets Available at the Link Below!</string>
     <string name="tickets_notified">You will be notified as soon as they become available!</string>
+
+    <!-- Sponsors -->
+    <string name="sponsors_ladybird">Ladybird Grove &amp; Mess Hall</string>
+    <string name="sponsors_highland_bakery">Highland Bakery</string>
+    <string name="sponsors_fourth_ward_park">Historic Fourth Ward Park Conservancy</string>
+    <string name="sponsors_nonis">Noni\'s Bar and Deli</string>
+    <string name="sponsors_nandina">Nandina Home &amp; Design</string>
+    <string name="sponsors_village_theatre">Village Theatre</string>
+    <string name="sponsors_wingate">Wingate Management</string>
+
+    <string name="sponsors_ladybird_info">Hip New American bar &amp; restaurant offering a campfire-&amp;-lodge theme, screened porches &amp; local beers.</string>
+
 </resources>

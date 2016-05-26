@@ -36,6 +36,7 @@ import com.fourthwardmobile.o4wtourofhomes.fragments.TicketsFragment;
 import com.fourthwardmobile.o4wtourofhomes.helpers.Util;
 import com.fourthwardmobile.o4wtourofhomes.interfaces.Constants;
 import com.fourthwardmobile.o4wtourofhomes.models.Home;
+import com.fourthwardmobile.o4wtourofhomes.models.Sponsor;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity
     /******************************************************************************************/
     private static String TAG = MainActivity.class.getSimpleName();
 
-    //XML Data Tags
+    //XML Home Data Tags
     private static final String XML_TAG_HOME = "home";
     private static final String XML_TAG_NAME = "name";
     private static final String XML_TAG_ADDRESS = "address";
@@ -65,6 +66,13 @@ public class MainActivity extends AppCompatActivity
     private static final String XML_TAG_YEAR = "year";
     private static final String XML_TAG_SECTION = "section";
     private static final String XML_TAG_IMAGE = "image";
+
+    //XML Sponsor Data Tags
+    private static final String XML_TAG_SPONSOR = "sponsor";
+    private static final String XML_TAG_DESCRIPTION = "description";
+    private static final String XML_TAG_BACKGROUND = "background";
+    private static final String XML_TAG_LOGO = "logo";
+    private static final String XML_TAG_WEBSITE = "website";
 
     private static final String ARG_FIRST_TIME = "first_times";
     private static final String ARG_HOME_LIST = "home_list";
@@ -283,25 +291,29 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private XmlPullParser getXmlParser(String xmlFile) throws XmlPullParserException,IOException {
+        XmlPullParserFactory pullParserFactory;
+        //Get Pull Parser instance
+        pullParserFactory = XmlPullParserFactory.newInstance();
+        XmlPullParser parser = pullParserFactory.newPullParser();
+
+        InputStream inputStream = getAssets().open(xmlFile);
+
+        parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+        //Set Input stream to the XML file as the source for the parser
+        parser.setInput(inputStream, null);
+
+        return parser;
+    }
+
     private ArrayList<Home> loadHomeData() {
 
         //String strXml = null;
         Log.e(TAG, "loadHomeData() Inside");
 
-        XmlPullParserFactory pullParserFactory;
         try {
 
-            //Get Pull Parser instance
-            pullParserFactory = XmlPullParserFactory.newInstance();
-            XmlPullParser parser = pullParserFactory.newPullParser();
-
-            InputStream inputStream = getAssets().open(FILE_HOMES_DATA);
-
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            //Set Input stream to the XML file as the source for the parser
-            parser.setInput(inputStream, null);
-
-            return parseXML(parser);
+            return parseHomeXML(getXmlParser(FILE_HOMES_DATA));
 
         } catch (XmlPullParserException e) {
             return null;
@@ -312,7 +324,74 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private ArrayList<Home> parseXML(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private ArrayList<Sponsor> loadSponsorData() {
+
+        //String strXml = null;
+        Log.e(TAG, "loadSponsorData() Inside");
+
+        try {
+
+            return parseSponsorXML(getXmlParser(FILE_SPONSORS_DATA));
+
+        } catch (XmlPullParserException e) {
+            return null;
+
+        } catch (IOException e) {
+            Log.e(TAG, "Exception loading XML data file. " + e.getMessage());
+            return null;
+        }
+    }
+
+    private ArrayList<Sponsor> parseSponsorXML(XmlPullParser parser) throws XmlPullParserException, IOException {
+
+        int eventType = parser.getEventType();
+
+        Sponsor currentSponsor = null;
+        ArrayList<Sponsor> sponsorList = null;
+
+        //Go through each line of XML till the end
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            String name = null;
+
+            switch (eventType) {
+                case XmlPullParser.START_DOCUMENT:
+                    sponsorList = new ArrayList<>();
+
+                    break;
+                case XmlPullParser.START_TAG:
+                    name = parser.getName();
+
+                    if(name.equalsIgnoreCase(XML_TAG_SPONSOR)) {
+                        currentSponsor = new Sponsor();
+                    } else if(currentSponsor != null) {
+
+                        if(name.equalsIgnoreCase(XML_TAG_NAME)) {
+                            currentSponsor.setName(parser.nextText());
+                        } else if(name.equalsIgnoreCase(XML_TAG_DESCRIPTION)) {
+                            currentSponsor.setDescription(parser.nextText());
+                        } else if(name.equalsIgnoreCase(XML_TAG_BACKGROUND)) {
+                            currentSponsor.setBackgroundImageUrl(parser.nextText());
+                        } else if(name.equalsIgnoreCase(XML_TAG_LOGO)) {
+                            currentSponsor.setLogoImageUrl(parser.nextText());
+                        } else if(name.equalsIgnoreCase(XML_TAG_WEBSITE)) {
+                            currentSponsor.setWebsite(parser.nextText());
+                        }
+                    }
+                    break;
+                case XmlPullParser.END_TAG:
+                    name = parser.getName();
+                    if (name.equalsIgnoreCase(XML_TAG_SPONSOR) && currentSponsor != null) {
+                        sponsorList.add(currentSponsor);
+                    }
+            }
+            eventType = parser.next();
+        }
+
+        Log.e(TAG, "End parsing XML, got number of sponsors = " + sponsorList.size());
+
+        return sponsorList;
+    }
+    private ArrayList<Home> parseHomeXML(XmlPullParser parser) throws XmlPullParserException, IOException {
 
 
         int eventType = parser.getEventType();
@@ -320,7 +399,7 @@ public class MainActivity extends AppCompatActivity
         Home currentHome = null;
         ArrayList<Home> homeList = null;
 
-        //Got through each line of XML till the end
+        //Go through each line of XML till the end
         while (eventType != XmlPullParser.END_DOCUMENT) {
             String name = null;
 

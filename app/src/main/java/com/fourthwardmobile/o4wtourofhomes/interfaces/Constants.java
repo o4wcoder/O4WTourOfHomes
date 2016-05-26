@@ -13,6 +13,7 @@ public interface Constants {
     public static final String EXTRA_CURRENT_HOME_POSITION = "com.fourthwardmobile.o4wtourofhomes.extra_current_home_position";
     public static final String EXTRA_HOME_LIST = "com.fourthwardmobile.o4wtourofhomes.extra_home_list";
     public static final String FILE_HOMES_DATA = "2015FeaturedHomesDataXML.xml";
+    public static final String FILE_SPONSORS_DATA = "2015SponsorsDataXML.xml";
 
 
 
