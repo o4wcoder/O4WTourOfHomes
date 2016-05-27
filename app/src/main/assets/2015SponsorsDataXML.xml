@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<data-set xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<sponsor>
+		<name>Ladybird Grove &amp;amp; Mess Hall</name>
+		<description>Hip New American bar &amp;amp; restaurant offering a campfire-&amp;amp;-lodge theme, screened porches &amp;amp; local beers.</description>
+		<background>http://i70.photobucket.com/albums/i102/chare37/ladybird_background_zpsggisrbvs.jpg</background>
+		<logo>http://i70.photobucket.com/albums/i102/chare37/ladybird_logo_zpsrrj8wbql.png</logo>
+		<website>http://www.ladybirdatlanta.com/</website>
+	</sponsor>
+	<sponsor>
+		<name>Highland Bakery</name>
+		<description>Southern-style cafe &amp; bakery offering all-day breakfast, salads &amp; sandwiches, plus fresh pastries.</description>
+		<background>http://i70.photobucket.com/albums/i102/chare37/highland_bakery_background_zpswaz592vj.jpg</background>
+		<logo>http://i70.photobucket.com/albums/i102/chare37/highland_logo_zpsphrix5si.png</logo>
+		<website>http://highlandbakery.com/</website>
+	</sponsor>
+	<sponsor>
+		<name>Historic Fourth Ward Park Conservancy</name>
+		<description>The Historic Fourth Ward Park Conservancy is a nonprofit organization with broad-based community support dedicated to enhancing the maintenance and security of the park while advocating for the full realization of the park plan. </description>
+		<background>http://i70.photobucket.com/albums/i102/chare37/o4w_park_background_zpsae4axva1.png</background>
+		<logo>http://i70.photobucket.com/albums/i102/chare37/fourthwardpark_logo_zpspcbaglxv.png</logo>
+		<website>http://www.h4wpc.com/</website>
+	</sponsor>
+	<sponsor>
+		<name>Noni's Bar and Deli</name>
+		<description>Hip neighborhood trattoria with patio serves Italian comfort food, plus a full bar &amp; dance parties.</description>
+		<background>http://i70.photobucket.com/albums/i102/chare37/nonis_background_zpshukxp5mb.jpg</background>
+		<logo>http://i70.photobucket.com/albums/i102/chare37/nonis_logo_zpszm6qmbjs.png</logo>
+		<website>http://nonisdeli.com/</website>
+	</sponsor>
+	<sponsor>
+		<name>Nandina Home &amp;amp; Design</name>
+		<description>High-end home store with unique furniture, art, accessories &amp;amp; gifts, plus interior design services.</description>
+		<background>http://i70.photobucket.com/albums/i102/chare37/nandina_background_zps1olbvrvn.jpg</background>
+		<logo>http://i70.photobucket.com/albums/i102/chare37/nandina_logo_zpsa2imi7vf.png</logo>
+		<website>http://nandinahome.com/</website>
+	</sponsor>
+	<sponsor>
+		<name>Village Theatre</name>
+		<description>Intimate, laid-back performance venue for live improvisational comedy.</description>
+		<background>http://i70.photobucket.com/albums/i102/chare37/village_theatre_background_zpsdh0jmnyo.jpg</background>
+		<logo>http://i70.photobucket.com/albums/i102/chare37/village_logo_zpstmtdj1bn.png</logo>
+		<website>http://villagecomedy.com/</website>
+	</sponsor>
+	<sponsor>
+		<name>Wingate Management</name>
+		<description>Propery Management company</description>
+		<background>http://i70.photobucket.com/albums/i102/chare37/wingate_background_zpsu8sqjrqt.jpg</background>
+		<logo>http://i70.photobucket.com/albums/i102/chare37/wingate_logo_zps8afaf7kc.jpg</logo>
+		<website>http://www.wingatecompanies.com/</website>
+	</sponsor>
+</data-set>

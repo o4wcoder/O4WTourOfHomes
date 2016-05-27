@@ -2,77 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="16dp"
+    android:layout_margin="4dp"
     tools:context="com.fourthwardmobile.o4wtourofhomes.fragments.SponsorsFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/sponsor_list_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        >
+        android:scrollbars="vertical">
     </android.support.v7.widget.RecyclerView>
 
-    <!--
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:columnCount="1">
-
-        <RelativeLayout style="@style/SponsorLayout">
-
-            <ImageView
-                style="@style/SponsorLogo"
-                android:src="@drawable/ladybird_logo"/>
-            <TextView
-                style="@style/SponsorTitle"
-                android:text="@string/sponsors_ladybird"/>
-            <TextView
-                style="@style/SponsorInfo"
-                android:text="@string/sponsors_ladybird_info"/>
-        </RelativeLayout>
-
-        <LinearLayout style="@style/SponsorLayout">
-
-            <ImageView
-                style="@style/SponsorLogo"
-                android:src="@drawable/highland_bakery_logo" />
-        </LinearLayout>
-
-        <LinearLayout style="@style/SponsorLayout">
-
-            <ImageView
-                style="@style/SponsorLogo"
-                android:src="@drawable/fourthwardpark_logo" />
-        </LinearLayout>
-
-        <LinearLayout style="@style/SponsorLayout">
-
-            <ImageView
-                style="@style/SponsorLogo"
-                android:src="@drawable/nonis_logo" />
-        </LinearLayout>
-
-        <LinearLayout style="@style/SponsorLayout">
-
-            <ImageView
-                style="@style/SponsorLogo"
-                android:src="@drawable/nandina_logo" />
-        </LinearLayout>
-
-        <LinearLayout style="@style/SponsorLayout">
-
-            <ImageView
-                style="@style/SponsorLogo"
-                android:src="@drawable/village_logo" />
-        </LinearLayout>
-
-        <LinearLayout style="@style/SponsorLayout">
-
-            <ImageView
-                style="@style/SponsorLogo"
-                android:src="@drawable/wingate_logo" />
-        </LinearLayout>
-    </GridLayout>
--->
 </FrameLayout>

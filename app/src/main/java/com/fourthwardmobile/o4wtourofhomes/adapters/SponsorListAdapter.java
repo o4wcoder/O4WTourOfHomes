@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.fourthwardmobile.o4wtourofhomes.R;
 import com.fourthwardmobile.o4wtourofhomes.models.Sponsor;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -51,6 +52,9 @@ public class SponsorListAdapter extends RecyclerView.Adapter<SponsorListAdapter.
     @Override
     public void onBindViewHolder(SponsorListAdapterViewHolder holder, int position) {
 
+        Picasso.with(mContext).load(mSponsorList.get(position).getBackgroundImageUrl()).into(holder.backgroundImageView);
+        Picasso.with(mContext).load(mSponsorList.get(position).getLogoImageUrl()).into(holder.logoImageView);
+        holder.nameTextView.setText(mSponsorList.get(position).getName().replaceAll("&amp;","&"));
     }
 
 
@@ -63,11 +67,18 @@ public class SponsorListAdapter extends RecyclerView.Adapter<SponsorListAdapter.
 
         public SponsorListAdapterViewHolder(View view) {
             super(view);
+
+            backgroundImageView = (ImageView)view.findViewById(R.id.sponsor_background_image_view);
+            backgroundImageView.setOnClickListener(this);
+
+            logoImageView = (ImageView)view.findViewById(R.id.sponsor_logo_image_view);
+            nameTextView = (TextView)view.findViewById(R.id.sponsor_name_text_view);
         }
 
         @Override
         public void onClick(View v) {
 
+            mClickHandler.onClick(getAdapterPosition(),this);
         }
     }
 

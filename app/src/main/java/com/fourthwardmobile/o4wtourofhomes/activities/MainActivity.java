@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity
     /******************************************************************************************/
     NavigationView mNavigationView;
     private ArrayList<Home> mHomeList = null;
+    private ArrayList<Sponsor> mSponsorList = null;
     boolean mIsFirstTime = true;
     //Used for passedback data after a return transition
     private Bundle mTmpReenterState;
@@ -160,7 +161,8 @@ public class MainActivity extends AppCompatActivity
         //Start with Home Fragment
         if (savedInstanceState == null) {
             //Load Home data and locations
-            new LoadDataTask().execute();
+            new LoadHomeDataTask().execute();
+            new LoadSponsorDataTask().execute();
 
             Log.e(TAG, "Nothing saved, first time through. Set home fragment");
             HomeFragment firstFragment = new HomeFragment();
@@ -178,7 +180,9 @@ public class MainActivity extends AppCompatActivity
             //If we got here, we may have rotated before the data was finished loading.
             //Go try and fetch it again
             if (mHomeList == null)
-                new LoadDataTask().execute();
+                new LoadHomeDataTask().execute();
+            if(mSponsorList == null)
+                new LoadSponsorDataTask().execute();
         }
 
 
@@ -248,7 +252,7 @@ public class MainActivity extends AppCompatActivity
             fragment = TicketsFragment.newInstance();
 
         } else if (id == R.id.nav_sponsors) {
-            fragment = SponsorsFragment.newInstance();
+            fragment = SponsorsFragment.newInstance(mSponsorList);
 
         } else if (id == R.id.nav_contact) {
             fragment = ContactsFragment.newInstance();
@@ -476,11 +480,12 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private class LoadDataTask extends AsyncTask<Void, Void, ArrayList<Home>> {
+    private class LoadHomeDataTask extends AsyncTask<Void, Void, ArrayList<Home>> {
 
         protected ArrayList<Home> doInBackground(Void... params) {
 
             return loadHomeData();
+
 
         }
 
@@ -489,6 +494,23 @@ public class MainActivity extends AppCompatActivity
             mHomeList = homeList;
 
             Log.e(TAG, "Finished AsynTask with home list size = " + mHomeList.size());
+        }
+    }
+
+    private class LoadSponsorDataTask extends AsyncTask<Void, Void, ArrayList<Sponsor>> {
+
+        protected ArrayList<Sponsor> doInBackground(Void... params) {
+
+            return loadSponsorData();
+
+
+        }
+
+        protected void onPostExecute(ArrayList<Sponsor> sponsorList) {
+
+            mSponsorList = sponsorList;
+
+            Log.e(TAG, "Finished AsynTask with sponsor list size = " + mSponsorList.size());
         }
     }
 }

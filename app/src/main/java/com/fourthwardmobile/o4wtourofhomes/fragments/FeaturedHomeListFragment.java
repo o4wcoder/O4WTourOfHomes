@@ -98,6 +98,11 @@ public class FeaturedHomeListFragment extends Fragment implements Constants{
         mLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         //Set Layout Manager for RecyclerView
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
         //Initialize the Adapter
         mAdapter = new FeaturedHomeListAdapter(getContext(),mHomeList, new FeaturedHomeListAdapter.HomeListAdapterOnClickHandler() {
             @Override
