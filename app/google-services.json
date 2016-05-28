@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "669276116086",
+    "firebase_url": "https://o4w-tour-of-homes.firebaseio.com",
+    "project_id": "o4w-tour-of-homes",
+    "storage_bucket": "o4w-tour-of-homes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:669276116086:android:907b36477ac8229c",
+        "android_client_info": {
+          "package_name": "com.fourthwardmobile.o4wtourofhomes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "669276116086-a4e9e2tso1hmjt5jqb6mchjlmchv8v4e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBeHLqhm8w6k3EcuruPVu5eREA3XG0CObY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

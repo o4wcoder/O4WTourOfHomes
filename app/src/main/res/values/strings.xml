@@ -60,4 +60,11 @@
 
     <string name="sponsors_ladybird_info">Hip New American bar &amp; restaurant offering a campfire-&amp;-lodge theme, screened porches &amp; local beers.</string>
 
+    <!-- Error Strings -->
+    <string name="google_play_service_out_of_date_error">Google Play Services is out of date on this device. Can not get location. Please upgrade Google Play Services</string>
+    <string name="google_play_service_connection_failed">Connection to Google Play Services Failed</string>
+
+    <!-- Shared Preferences -->
+    <string name="pref_tickets_available_key" translatable="false">ticket_available_key</string>
+    <string name="pref_tickets_available_default" translatable="false">false</string>
 </resources>

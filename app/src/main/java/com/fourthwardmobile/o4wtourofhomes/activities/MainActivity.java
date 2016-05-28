@@ -6,6 +6,8 @@ import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
@@ -37,7 +39,10 @@ import com.fourthwardmobile.o4wtourofhomes.helpers.Util;
 import com.fourthwardmobile.o4wtourofhomes.interfaces.Constants;
 import com.fourthwardmobile.o4wtourofhomes.models.Home;
 import com.fourthwardmobile.o4wtourofhomes.models.Sponsor;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -50,7 +55,9 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Constants, HomeFragment.OnFragmentCallback {
+        implements NavigationView.OnNavigationItemSelectedListener, Constants,
+        HomeFragment.OnFragmentCallback, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener{
 
     /******************************************************************************************/
     /*                                     Constants                                          */
@@ -87,9 +94,6 @@ public class MainActivity extends AppCompatActivity
     private Bundle mTmpReenterState;
 
     private FeaturedHomeListFragment mHomeListFragment;
-
-
-    private ImageView mTicketImageView;
 
     /**
      * Need a shared element callback for return transition. We need to see if the pager
@@ -155,7 +159,18 @@ public class MainActivity extends AppCompatActivity
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
 
-        Log.e(TAG, "onCreate() Load Home Data");
+
+//        //Check for intent coming from Firebase Cloud Messaging Notification
+//        if(getIntent().getExtras() != null) {
+//            Log.e(TAG,"onCraete(): Got some extras. Let's see if we have any Firebase data!!!");
+//            for (String key : getIntent().getExtras().keySet()) {
+//                String value = getIntent().getExtras().getString(key);
+//                Log.d(TAG, "onCreate(): Firebase Key: " + key + " Value: " + value);
+//            }
+//        }
+//        else {
+//            Log.e(TAG,"onCreate(): Extra in MainActivity were null. No Firebase data!!!!!!");
+//        }
 
 
         //Start with Home Fragment
@@ -181,11 +196,9 @@ public class MainActivity extends AppCompatActivity
             //Go try and fetch it again
             if (mHomeList == null)
                 new LoadHomeDataTask().execute();
-            if(mSponsorList == null)
+            if (mSponsorList == null)
                 new LoadSponsorDataTask().execute();
         }
-
-
     }
 
     @Override
@@ -477,6 +490,27 @@ public class MainActivity extends AppCompatActivity
 
         //Update Navigation Drawer to select the Map Menu
         mNavigationView.setCheckedItem(R.id.nav_map);
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+        if(connectionResult.getErrorCode() == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED) {
+            Toast.makeText(this, getString(R.string.google_play_service_out_of_date_error),Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(this,getString(R.string.google_play_service_connection_failed),Toast.LENGTH_LONG).show();
+        }
     }
 
 

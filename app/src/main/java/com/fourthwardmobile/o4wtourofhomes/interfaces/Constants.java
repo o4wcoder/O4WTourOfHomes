@@ -16,6 +16,9 @@ public interface Constants {
     public static final String FILE_HOMES_DATA = "2015FeaturedHomesDataXML.xml";
     public static final String FILE_SPONSORS_DATA = "2015SponsorsDataXML.xml";
 
+    /* MSG KEYS */
+    public static final String MSG_KEY_TICKETS_AVAILABLE = "tickets_available";
+
 
 
 
