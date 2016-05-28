@@ -107,8 +107,6 @@ public class FeaturedHomeListFragment extends Fragment implements Constants{
         mAdapter = new FeaturedHomeListAdapter(getContext(),mHomeList, new FeaturedHomeListAdapter.HomeListAdapterOnClickHandler() {
             @Override
             public void onClick(int position, FeaturedHomeListAdapter.FeaturedHomeListAdapterViewHolder vh) {
-                Log.e(TAG,"FeaturedHomeListFragment() onClick at position = " + position + " trans name = " + vh.thumbnailImageView.getTransitionName());
-
 
                 Intent intent = new Intent(getActivity(),FeaturedHomeDetailActivity.class);
                 intent.putExtra(EXTRA_HOME_POSITION,position);
