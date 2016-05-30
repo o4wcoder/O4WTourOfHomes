@@ -25,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SlidingDrawer;
 import android.widget.Toast;
 
 import com.fourthwardmobile.o4wtourofhomes.R;
@@ -93,6 +94,8 @@ public class MainActivity extends AppCompatActivity
     //Used for passedback data after a return transition
     private Bundle mTmpReenterState;
 
+    private int mSelectedNavItem;
+
     private FeaturedHomeListFragment mHomeListFragment;
 
     /**
@@ -158,6 +161,50 @@ public class MainActivity extends AppCompatActivity
 
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
+        drawer.setDrawerListener(new DrawerLayout.DrawerListener() {
+                                     @Override
+                                     public void onDrawerSlide(View drawerView, float slideOffset) {
+
+                                     }
+
+                                     @Override
+                                     public void onDrawerOpened(View drawerView) {
+
+                                     }
+
+                                     @Override
+                                     public void onDrawerClosed(View drawerView) {
+
+                                          Log.e(TAG,"onDrwaerCloser():");
+                                         Fragment fragment = null;
+                                         int id = mSelectedNavItem;
+
+                                         if(mSelectedNavItem > 0) {
+                                             if (id == R.id.nav_home) {
+                                                 fragment = HomeFragment.newInstance();
+                                             } else if (id == R.id.nav_featured_homes) {
+                                                 fragment = FeaturedHomeListFragment.newInstance(mHomeList);
+                                                 mHomeListFragment = (FeaturedHomeListFragment) fragment;
+
+                                             } else if (id == R.id.nav_map) {
+                                                 fragment = MapHomeFragment.newInstance(mHomeList, Util.getFourthWardParkLocation());
+
+                                             } else if (id == R.id.nav_tickets) {
+                                                 fragment = TicketsFragment.newInstance();
+
+                                             } else if (id == R.id.nav_sponsors) {
+                                                 fragment = SponsorsFragment.newInstance(mSponsorList);
+
+                                             }
+                                             updateFragment(fragment);
+                                         }
+                                     }
+
+                                     @Override
+                                     public void onDrawerStateChanged(int newState) {
+
+                                     }
+                                 });
 
 
 //        //Check for intent coming from Firebase Cloud Messaging Notification
@@ -173,7 +220,7 @@ public class MainActivity extends AppCompatActivity
 //        }
 
 
-        //Start with Home Fragment
+                //Start with Home Fragment
         if (savedInstanceState == null) {
             //Load Home data and locations
             new LoadHomeDataTask().execute();
@@ -249,29 +296,9 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
 
-        Fragment fragment = null;
-        int id = item.getItemId();
+        Log.e(TAG,"onNavigationItemSelected()");
+        mSelectedNavItem = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            fragment = HomeFragment.newInstance();
-        } else if (id == R.id.nav_featured_homes) {
-            fragment = FeaturedHomeListFragment.newInstance(mHomeList);
-            mHomeListFragment = (FeaturedHomeListFragment)fragment;
-
-        } else if (id == R.id.nav_map) {
-            fragment = MapHomeFragment.newInstance(mHomeList, Util.getFourthWardParkLocation());
-
-        } else if (id == R.id.nav_tickets) {
-            fragment = TicketsFragment.newInstance();
-
-        } else if (id == R.id.nav_sponsors) {
-            fragment = SponsorsFragment.newInstance(mSponsorList);
-
-        } else if (id == R.id.nav_contact) {
-            fragment = ContactsFragment.newInstance();
-        }
-
-        updateFragment(fragment);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -512,6 +539,7 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this,getString(R.string.google_play_service_connection_failed),Toast.LENGTH_LONG).show();
         }
     }
+
 
 
     private class LoadHomeDataTask extends AsyncTask<Void, Void, ArrayList<Home>> {

@@ -32,9 +32,12 @@ public class TourFirebaseMessagingService extends FirebaseMessagingService imple
         Log.e(TAG,"onMessageReceived() Data = " + remoteMessage.getData());
 
         if(remoteMessage.getData().containsKey(MSG_KEY_TICKETS_AVAILABLE)) {
+
+
             Log.e(TAG,"Got tickets_avaialble key");
 
             Log.e(TAG,"Got ticket_available value = " + remoteMessage.getData().get(MSG_KEY_TICKETS_AVAILABLE));
+            sendNotification(remoteMessage.getNotification().getBody());
         }
 
 
