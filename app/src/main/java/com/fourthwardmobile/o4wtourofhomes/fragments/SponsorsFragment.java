@@ -30,6 +30,7 @@ public class SponsorsFragment extends Fragment {
    private static final String TAG = SponsorsFragment.class.getSimpleName();
 
     private static final String ARG_SPONSOR_LIST = "sponsor_list";
+
     /****************************************************************************************/
     /*                                 Local Data                                           */
     /****************************************************************************************/

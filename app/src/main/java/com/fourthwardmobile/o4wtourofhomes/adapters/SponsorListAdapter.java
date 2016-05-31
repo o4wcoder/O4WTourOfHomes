@@ -23,7 +23,7 @@ public class SponsorListAdapter extends RecyclerView.Adapter<SponsorListAdapter.
     /*                                    Constants                                         */
     /****************************************************************************************/
     private final static String TAG = SponsorListAdapter.class.getSimpleName();
-
+    private final static int LOGO_FADE_DURATION = 500;
     /****************************************************************************************/
     /*                                    Local Data                                        */
     /****************************************************************************************/
@@ -50,10 +50,22 @@ public class SponsorListAdapter extends RecyclerView.Adapter<SponsorListAdapter.
     }
 
     @Override
-    public void onBindViewHolder(SponsorListAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(final SponsorListAdapterViewHolder holder, int position) {
 
         Picasso.with(mContext).load(mSponsorList.get(position).getBackgroundImageUrl()).into(holder.backgroundImageView);
-        Picasso.with(mContext).load(mSponsorList.get(position).getLogoImageUrl()).into(holder.logoImageView);
+        holder.logoImageView.setAlpha(0f);
+        Picasso.with(mContext).load(mSponsorList.get(position).getLogoImageUrl())
+                .into(holder.logoImageView, new com.squareup.picasso.Callback() {
+            @Override
+            public void onSuccess() {
+                holder.logoImageView.animate().setDuration(LOGO_FADE_DURATION).alpha(1f);
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
         holder.nameTextView.setText(mSponsorList.get(position).getName().replaceAll("&amp;","&"));
     }
 

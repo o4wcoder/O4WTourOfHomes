@@ -161,63 +161,6 @@ public class MainActivity extends AppCompatActivity
 
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
-        drawer.setDrawerListener(new DrawerLayout.DrawerListener() {
-                                     @Override
-                                     public void onDrawerSlide(View drawerView, float slideOffset) {
-
-                                     }
-
-                                     @Override
-                                     public void onDrawerOpened(View drawerView) {
-
-                                     }
-
-                                     @Override
-                                     public void onDrawerClosed(View drawerView) {
-
-                                          Log.e(TAG,"onDrwaerCloser():");
-                                         Fragment fragment = null;
-                                         int id = mSelectedNavItem;
-
-                                         if(mSelectedNavItem > 0) {
-                                             if (id == R.id.nav_home) {
-                                                 fragment = HomeFragment.newInstance();
-                                             } else if (id == R.id.nav_featured_homes) {
-                                                 fragment = FeaturedHomeListFragment.newInstance(mHomeList);
-                                                 mHomeListFragment = (FeaturedHomeListFragment) fragment;
-
-                                             } else if (id == R.id.nav_map) {
-                                                 fragment = MapHomeFragment.newInstance(mHomeList, Util.getFourthWardParkLocation());
-
-                                             } else if (id == R.id.nav_tickets) {
-                                                 fragment = TicketsFragment.newInstance();
-
-                                             } else if (id == R.id.nav_sponsors) {
-                                                 fragment = SponsorsFragment.newInstance(mSponsorList);
-
-                                             }
-                                             updateFragment(fragment);
-                                         }
-                                     }
-
-                                     @Override
-                                     public void onDrawerStateChanged(int newState) {
-
-                                     }
-                                 });
-
-
-//        //Check for intent coming from Firebase Cloud Messaging Notification
-//        if(getIntent().getExtras() != null) {
-//            Log.e(TAG,"onCraete(): Got some extras. Let's see if we have any Firebase data!!!");
-//            for (String key : getIntent().getExtras().keySet()) {
-//                String value = getIntent().getExtras().getString(key);
-//                Log.d(TAG, "onCreate(): Firebase Key: " + key + " Value: " + value);
-//            }
-//        }
-//        else {
-//            Log.e(TAG,"onCreate(): Extra in MainActivity were null. No Firebase data!!!!!!");
-//        }
 
 
                 //Start with Home Fragment
@@ -298,6 +241,29 @@ public class MainActivity extends AppCompatActivity
 
         Log.e(TAG,"onNavigationItemSelected()");
         mSelectedNavItem = item.getItemId();
+
+        Fragment fragment = null;
+        int id = mSelectedNavItem;
+
+        if(mSelectedNavItem > 0) {
+            if (id == R.id.nav_home) {
+                fragment = HomeFragment.newInstance();
+            } else if (id == R.id.nav_featured_homes) {
+                fragment = FeaturedHomeListFragment.newInstance(mHomeList);
+                mHomeListFragment = (FeaturedHomeListFragment) fragment;
+
+            } else if (id == R.id.nav_map) {
+                fragment = MapHomeFragment.newInstance(mHomeList, Util.getFourthWardParkLocation());
+
+            } else if (id == R.id.nav_tickets) {
+                fragment = TicketsFragment.newInstance();
+
+            } else if (id == R.id.nav_sponsors) {
+                fragment = SponsorsFragment.newInstance(mSponsorList);
+
+            }
+            updateFragment(fragment);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

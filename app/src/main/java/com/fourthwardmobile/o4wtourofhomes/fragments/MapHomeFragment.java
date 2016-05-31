@@ -267,7 +267,6 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
 
     /********************************************************************************************/
     /*                                   Inner Classes                                          */
-
     /********************************************************************************************/
     public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
