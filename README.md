@@ -10,7 +10,7 @@ More information can be found out about the tour can be found out here
 <br>
 <a href="http://s70.photobucket.com/user/chare37/media/5a6034a5-5ac2-4a70-b815-5a60dafb7981_zpsanaogmfh.png.html" target="_blank"><img src="http://i70.photobucket.com/albums/i102/chare37/5a6034a5-5ac2-4a70-b815-5a60dafb7981_zpsanaogmfh.png" border="0" alt=" photo 5a6034a5-5ac2-4a70-b815-5a60dafb7981_zpsanaogmfh.png"/></a>
 <a href="http://s70.photobucket.com/user/chare37/media/a9db1242-e2b2-40aa-a632-4effd85422e6_zpsoaovmwo7.png.html" target="_blank"><img src="http://i70.photobucket.com/albums/i102/chare37/a9db1242-e2b2-40aa-a632-4effd85422e6_zpsoaovmwo7.png" border="0" alt=" photo a9db1242-e2b2-40aa-a632-4effd85422e6_zpsoaovmwo7.png"/></a>
-<a href="http://s70.photobucket.com/user/chare37/media/8da11659-ac4e-40d9-93fb-eb0ee053afa5_zpsjhtco3t6.png.html" target="_blank"><img src="http://i70.photobucket.com/albums/i102/chare37/8da11659-ac4e-40d9-93fb-eb0ee053afa5_zpsjhtco3t6.png" border="0" alt=" photo 8da11659-ac4e-40d9-93fb-eb0ee053afa5_zpsjhtco3t6.png"/></a>
+<a href="http://s70.photobucket.com/user/chare37/media/9af15f88-834a-4154-aae3-ed571ca9ac42_zpsuweeg3ng.png.html" target="_blank"><img src="http://i70.photobucket.com/albums/i102/chare37/9af15f88-834a-4154-aae3-ed571ca9ac42_zpsuweeg3ng.png" border="0" alt=" photo 9af15f88-834a-4154-aae3-ed571ca9ac42_zpsuweeg3ng.png"/></a>
 
 # Technical Features
 * Full Material Design specs including Annimation and color palette
