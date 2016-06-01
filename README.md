@@ -1,8 +1,9 @@
 # Old Fourth Ward Tour of Homes
 
-Android App for Atlanta's Old Fourth Ward Neighborhood's Annual Tour of Homes. This app is a companionn to the events web site allwowing you to explore and find the homes on the tour. You can also purcase ticket (when avaible) through this app.
+Android App for Atlanta's Old Fourth Ward Neighborhood's Annual Tour of Homes. This app is a companion to the events web site allowing you to explore and find the homes on the tour. You can also purchase ticket (when available) through this app. Users will be notified, through Firebase Cloud Messaging when tickets are available.
 
-More information can be found out about the tour can be found out here
+More information can be found out about the tour can be found out here.
+
 
 <a href="http://fallinthe4thward.com/">Fall In The Fourth</a>
 
@@ -21,6 +22,9 @@ More information can be found out about the tour can be found out here
 
 #Status
 Version 1.0. Not currently available on Google Play. Expect first vesion avaiable in June 2016.<br>
+
+# Versions
+* Free Version. No Ads
 
 # Google Services APIs
 * Maps
