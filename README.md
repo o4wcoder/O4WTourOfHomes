@@ -12,10 +12,11 @@ More information can be found out about the tour can be found out here
 <a href="http://s70.photobucket.com/user/chare37/media/a9db1242-e2b2-40aa-a632-4effd85422e6_zpsoaovmwo7.png.html" target="_blank"><img src="http://i70.photobucket.com/albums/i102/chare37/a9db1242-e2b2-40aa-a632-4effd85422e6_zpsoaovmwo7.png" border="0" alt=" photo a9db1242-e2b2-40aa-a632-4effd85422e6_zpsoaovmwo7.png"/></a>
 <a href="http://s70.photobucket.com/user/chare37/media/9af15f88-834a-4154-aae3-ed571ca9ac42_zpsuweeg3ng.png.html" target="_blank"><img src="http://i70.photobucket.com/albums/i102/chare37/9af15f88-834a-4154-aae3-ed571ca9ac42_zpsuweeg3ng.png" border="0" alt=" photo 9af15f88-834a-4154-aae3-ed571ca9ac42_zpsuweeg3ng.png"/></a>
 <a href="http://s70.photobucket.com/user/chare37/media/1a8a0f35-9971-4b76-a835-b334fcc19c76_zpsziawm1re.png.html" target="_blank"><img src="http://i70.photobucket.com/albums/i102/chare37/1a8a0f35-9971-4b76-a835-b334fcc19c76_zpsziawm1re.png" border="0" alt=" photo 1a8a0f35-9971-4b76-a835-b334fcc19c76_zpsziawm1re.png"/></a>
-
+<a href="http://s70.photobucket.com/user/chare37/media/6b5694a8-708e-4814-8ac0-51d2199f3ca9_zpseb5kcq4i.png.html" target="_blank"><img src="http://i70.photobucket.com/albums/i102/chare37/6b5694a8-708e-4814-8ac0-51d2199f3ca9_zpseb5kcq4i.png" border="0" alt=" photo 6b5694a8-708e-4814-8ac0-51d2199f3ca9_zpseb5kcq4i.png"/></a>
+<a href="http://s70.photobucket.com/user/chare37/media/dc22c231-ec0d-45b2-b609-05d640096716_zpsifsdknhv.png.html" target="_blank"><img src="http://i70.photobucket.com/albums/i102/chare37/dc22c231-ec0d-45b2-b609-05d640096716_zpsifsdknhv.png" border="0" alt=" photo dc22c231-ec0d-45b2-b609-05d640096716_zpsifsdknhv.png"/></a>
 # Technical Features
 * Full Material Design specs including Annimation and color palette
-* Users will be notificed about ticket availablity through Google Cloud Messaging.
+* Users will be notificed about ticket availablity through Firebase Cloud Messaging.
 * Custom Map Markers
 
 #Status
@@ -23,7 +24,7 @@ Version 1.0. Not currently available on Google Play. Expect first vesion avaiabl
 
 # Google Services APIs
 * Maps
-* Google Cloud Messaging
+* Firebase Cloud Messaging
 
 # Contributing<br>
 * No contributions to this project
