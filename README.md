@@ -8,7 +8,7 @@ More information can be found out about the tour can be found out here
 
 <b>Phone Images</b>
 <br>
-<a href="http://s70.photobucket.com/user/chare37/media/80b684f7-59cf-444d-8ee6-50f6015d5a27_zps9jcdxcp1.png.html" target="_blank"><img src="http://i70.photobucket.com/albums/i102/chare37/80b684f7-59cf-444d-8ee6-50f6015d5a27_zps9jcdxcp1.png" border="0" alt=" photo 80b684f7-59cf-444d-8ee6-50f6015d5a27_zps9jcdxcp1.png"/></a>
+<a href="http://s70.photobucket.com/user/chare37/media/home_screen_zpsraqxq7tu.png.html" target="_blank"><img src="http://i70.photobucket.com/albums/i102/chare37/home_screen_zpsraqxq7tu.png" border="0" alt=" photo home_screen_zpsraqxq7tu.png"/></a>
 
 # Technical Features
 * Full Material Design specs including Annimation and color palette
