@@ -82,7 +82,6 @@ public class FeaturedHomeListFragment extends Fragment implements Constants{
         if (getArguments() != null) {
             mHomeList = getArguments().getParcelableArrayList(ARG_HOME_LIST);
         }
-        Log.e(TAG,"onCreate() setExitSharedElementCallback");
 
     }
 

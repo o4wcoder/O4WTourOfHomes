@@ -31,8 +31,9 @@
     <string name="marker_buy_tickets">Buy Tickets</string>
 
     <!-- Error Messages -->
-    <string name="no_network">No Network Connection Available. Maps will be disabled.</string>
+    <string name="no_network_map">No Network Connection Available. Maps will be disabled.</string>
     <string name="title_activity_home_detail">HomeDetailActivity</string>
+
 
     <!-- Transitions/Annimations -->
     <string name="trans_home_image">trans_home_image</string>
@@ -67,4 +68,8 @@
     <!-- Shared Preferences -->
     <string name="pref_tickets_available_key" translatable="false">ticket_available_key</string>
     <string name="pref_tickets_available_default" translatable="false">false</string>
+
+    <!-- No Network Screen -->
+    <string name="no_network">No Network Connection Available. Please check network settings.</string>
+    <string name="retry">Retry</string>
 </resources>

@@ -11,6 +11,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,29 +47,7 @@ public class FeaturedHomeDetailActivity extends AppCompatActivity implements Con
     private boolean mIsReturning;
 
 
-    private final SharedElementCallback mCallback = new SharedElementCallback() {
-        @Override
-        public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
-            if (mIsReturning) {
-                ImageView sharedElement = mCurrentDetailsFragment.getSharedImage();
-                if (sharedElement == null) {
-                    // If shared element is null, then it has been scrolled off screen and
-                    // no longer visible. In this case we cancel the shared element transition by
-                    // removing the shared element from the shared elements map.
-                    names.clear();
-                    sharedElements.clear();
-                } else if (mStartingPosition != mCurrentPosition) {
-                    // If the user has swiped to a different ViewPager page, then we need to
-                    // remove the old shared element and replace it with the new shared element
-                    // that should be transitioned instead.
-                    names.clear();
-                    names.add(sharedElement.getTransitionName());
-                    sharedElements.clear();
-                    sharedElements.put(sharedElement.getTransitionName(), sharedElement);
-                }
-            }
-        }
-    };
+    private SharedElementCallback mCallback = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +58,35 @@ public class FeaturedHomeDetailActivity extends AppCompatActivity implements Con
 //                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 //        }
 
+
         setContentView(R.layout.activity_home_detail);
         Log.e(TAG,"onCreate()");
         supportPostponeEnterTransition();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            mCallback = new SharedElementCallback() {
+                @Override
+                public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                    if (mIsReturning) {
+                        ImageView sharedElement = mCurrentDetailsFragment.getSharedImage();
+                        if (sharedElement == null) {
+                            // If shared element is null, then it has been scrolled off screen and
+                            // no longer visible. In this case we cancel the shared element transition by
+                            // removing the shared element from the shared elements map.
+                            names.clear();
+                            sharedElements.clear();
+                        } else if (mStartingPosition != mCurrentPosition) {
+                            // If the user has swiped to a different ViewPager page, then we need to
+                            // remove the old shared element and replace it with the new shared element
+                            // that should be transitioned instead.
+                            names.clear();
+                            names.add(sharedElement.getTransitionName());
+                            sharedElements.clear();
+                            sharedElements.put(sharedElement.getTransitionName(), sharedElement);
+                        }
+                    }
+                }
+            };
             setEnterSharedElementCallback(mCallback);
         }
 

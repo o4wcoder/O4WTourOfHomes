@@ -4,8 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.FeaturedHomeDetailFragment"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    tools:context=".fragments.FeaturedHomeDetailFragment">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -18,6 +18,7 @@
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
@@ -41,16 +42,16 @@
 
                 <TextView
                     android:id="@+id/detail_home_name"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:fontFamily="sans-serif-condensed"
                     android:lineSpacingMultiplier="0.9"
                     android:paddingBottom="@dimen/detail_title_vert_padding"
                     android:paddingLeft="@dimen/detail_title_horiz_padding"
-                    android:paddingRight="@dimen/detail_title_horiz_padding"
+                    android:paddingRight="@dimen/detail_title_horiz_padding_right"
                     android:paddingStart="@dimen/detail_title_horiz_padding"
-                    android:paddingEnd="@dimen/detail_title_horiz_padding"
+                    android:paddingEnd="@dimen/detail_title_horiz_padding_right"
                     android:paddingTop="@dimen/detail_title_vert_padding"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
                     android:textColor="#fff"
@@ -76,21 +77,21 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
-        android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_margin="16dp"
-        android:orientation="vertical"
-        android:id="@+id/home_detail_bottom_panel">
+        android:id="@+id/home_detail_bottom_panel"
+        android:orientation="vertical">
+        <!--
         <TextView
             style="@style/DetailTextView"
             android:id="@+id/detail_owner_text_view"/>
+            -->
         <TextView
             style="@style/DetailTextView"
             android:id="@+id/detail_home_type_text_view"/>

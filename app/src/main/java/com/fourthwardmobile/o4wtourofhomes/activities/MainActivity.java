@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SlidingDrawer;
 import android.widget.Toast;
@@ -147,47 +148,112 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        setExitSharedElementCallback(mCallback);
-        Log.e(TAG, "onCreate()");
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        if(Util.isNetworkAvailable(getApplicationContext())) {
+            setContentView(R.layout.activity_main);
+            setExitSharedElementCallback(mCallback);
+            Log.e(TAG, "onCreate()");
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
 
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        mNavigationView.setNavigationItemSelectedListener(this);
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.setDrawerListener(toggle);
+            toggle.syncState();
+
+            mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+            mNavigationView.setNavigationItemSelectedListener(this);
+
+            drawer.setDrawerListener(new DrawerLayout.DrawerListener() {
+                @Override
+                public void onDrawerSlide(View drawerView, float slideOffset) {
+
+                }
+
+                @Override
+                public void onDrawerOpened(View drawerView) {
+
+                }
+
+                @Override
+                public void onDrawerClosed(View drawerView) {
+
+                    Log.e(TAG, "onDrawerClose()");
+                    Fragment fragment = null;
+                    int id = mSelectedNavItem;
+
+                    if (mSelectedNavItem > 0) {
+                        if (id == R.id.nav_home) {
+                            fragment = HomeFragment.newInstance();
+                        } else if (id == R.id.nav_featured_homes) {
+                            fragment = FeaturedHomeListFragment.newInstance(mHomeList);
+                            mHomeListFragment = (FeaturedHomeListFragment) fragment;
+
+                        } else if (id == R.id.nav_map) {
+                            fragment = MapHomeFragment.newInstance(mHomeList, Util.getFourthWardParkLocation());
+
+                        } else if (id == R.id.nav_tickets) {
+                            fragment = TicketsFragment.newInstance();
+
+                        } else if (id == R.id.nav_sponsors) {
+                            fragment = SponsorsFragment.newInstance(mSponsorList);
+
+                        }
+                        updateFragment(fragment);
+                    }
+                }
+
+                @Override
+                public void onDrawerStateChanged(int newState) {
+
+                }
+            });
 
 
-                //Start with Home Fragment
-        if (savedInstanceState == null) {
-            //Load Home data and locations
-            new LoadHomeDataTask().execute();
-            new LoadSponsorDataTask().execute();
-
-            Log.e(TAG, "Nothing saved, first time through. Set home fragment");
-            HomeFragment firstFragment = new HomeFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, firstFragment).commit();
-
-            //Select Home menu on Navigation Drawer
-            mNavigationView.setCheckedItem(R.id.nav_home);
-
-            mIsFirstTime = false;
-        } else {
-            mIsFirstTime = savedInstanceState.getBoolean(ARG_FIRST_TIME);
-            mHomeList = savedInstanceState.getParcelableArrayList(ARG_HOME_LIST);
-
-            //If we got here, we may have rotated before the data was finished loading.
-            //Go try and fetch it again
-            if (mHomeList == null)
+            //Start with Home Fragment
+            if (savedInstanceState == null) {
+                //Load Home data and locations
                 new LoadHomeDataTask().execute();
-            if (mSponsorList == null)
                 new LoadSponsorDataTask().execute();
+
+                Log.e(TAG, "onCreate(): Nothing saved, first time through. Set home fragment");
+                HomeFragment firstFragment = new HomeFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.fragment_container, firstFragment).commit();
+
+                //Select Home menu on Navigation Drawer
+                mNavigationView.setCheckedItem(R.id.nav_home);
+
+                mIsFirstTime = false;
+            } else {
+                Log.e(TAG,"onCreate(): Not first time, recreate fragment");
+                mIsFirstTime = savedInstanceState.getBoolean(ARG_FIRST_TIME);
+                mHomeList = savedInstanceState.getParcelableArrayList(ARG_HOME_LIST);
+
+                //If we got here, we may have rotated before the data was finished loading.
+                //Go try and fetch it again
+                if (mHomeList == null)
+                    new LoadHomeDataTask().execute();
+                if (mSponsorList == null)
+                    new LoadSponsorDataTask().execute();
+            }
+        } else {
+            setContentView(R.layout.no_network);
+
+            Button retryButton = (Button)findViewById(R.id.retry_button);
+            retryButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    //See if the network is up now. If it is, restart activity
+                    if(Util.isNetworkAvailable(getApplicationContext())) {
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
+                    }
+                }
+            });
         }
     }
 
@@ -205,34 +271,38 @@ public class MainActivity extends AppCompatActivity
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if(drawer != null) {
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+                super.onBackPressed();
+            }
         } else {
             super.onBackPressed();
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -241,29 +311,6 @@ public class MainActivity extends AppCompatActivity
 
         Log.e(TAG,"onNavigationItemSelected()");
         mSelectedNavItem = item.getItemId();
-
-        Fragment fragment = null;
-        int id = mSelectedNavItem;
-
-        if(mSelectedNavItem > 0) {
-            if (id == R.id.nav_home) {
-                fragment = HomeFragment.newInstance();
-            } else if (id == R.id.nav_featured_homes) {
-                fragment = FeaturedHomeListFragment.newInstance(mHomeList);
-                mHomeListFragment = (FeaturedHomeListFragment) fragment;
-
-            } else if (id == R.id.nav_map) {
-                fragment = MapHomeFragment.newInstance(mHomeList, Util.getFourthWardParkLocation());
-
-            } else if (id == R.id.nav_tickets) {
-                fragment = TicketsFragment.newInstance();
-
-            } else if (id == R.id.nav_sponsors) {
-                fragment = SponsorsFragment.newInstance(mSponsorList);
-
-            }
-            updateFragment(fragment);
-        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

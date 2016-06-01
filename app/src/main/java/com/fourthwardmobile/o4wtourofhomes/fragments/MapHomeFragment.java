@@ -184,6 +184,18 @@ public class MapHomeFragment extends Fragment implements OnMapReadyCallback,
 
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mZoomLocation, 15));
 
+            //set address of zoom location
+
+            //first check purchase ticket location
+            if(mZoomLocation.equals(Util.getFourthWardParkLocation())) {
+                mAddressTextView.setText(getString(R.string.marker_buy_tickets));
+            } else {
+                for(Home home : mHomeList) {
+                    if(home.getLocation().equals(mZoomLocation))
+                        mAddressTextView.setText(home.getName());
+                }
+            }
+
         }
     }
 

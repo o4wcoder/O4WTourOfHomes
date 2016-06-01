@@ -180,8 +180,8 @@ public class FeaturedHomeDetailFragment extends Fragment implements Constants{
                 }
             });
         }
-        TextView ownerTextView = (TextView)view.findViewById(R.id.detail_owner_text_view);
-        ownerTextView.setText(getSpannedString(getString(R.string.detail_header_owner),mHome.getOwners()));
+//        TextView ownerTextView = (TextView)view.findViewById(R.id.detail_owner_text_view);
+//        ownerTextView.setText(getSpannedString(getString(R.string.detail_header_owner),mHome.getOwners()));
 
         TextView homeTypeTextView = (TextView)view.findViewById(R.id.detail_home_type_text_view);
         homeTypeTextView.setText(getSpannedString(getString(R.string.detail_header_home_type),mHome.getHomeType()));
@@ -192,8 +192,8 @@ public class FeaturedHomeDetailFragment extends Fragment implements Constants{
         TextView sectionTextView = (TextView)view.findViewById(R.id.detail_section_text_view);
         sectionTextView.setText(getSpannedString(getString(R.string.detail_header_section),mHome.getSection()));
 
-        TextView descriptionTextView = (TextView)view.findViewById(R.id.detail_description_text_view);
-        descriptionTextView.setText(getString(R.string.main_about_desc));
+//        TextView descriptionTextView = (TextView)view.findViewById(R.id.detail_description_text_view);
+//        descriptionTextView.setText(getString(R.string.main_about_desc));
 
 
 

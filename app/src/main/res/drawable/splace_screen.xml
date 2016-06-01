@@ -8,4 +8,5 @@
             android:gravity="center"
             android:src="@drawable/o4w_home_logo_xxx" />
     </item>
+
 </layer-list>
