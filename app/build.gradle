@@ -12,6 +12,15 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    signingConfigs {
+        release {
+            storeFile file("o4wtourofhomes.jks")
+            storePassword 'Vorlon37'
+            keyAlias "o4wtourofhomes"
+            keyPassword 'Vorlon37'
+        }
+    }
     buildTypes {
         debug {
             resValue "string", "PLACES_API_KEY", PLACES_API_KEY
@@ -20,6 +29,8 @@ android {
             resValue "string", "PLACES_API_KEY", PLACES_API_KEY
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+            signingConfig signingConfigs.release
         }
     }
 }
