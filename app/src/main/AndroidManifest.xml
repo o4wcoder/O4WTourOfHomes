@@ -29,7 +29,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
-        <activity android:name=".activities.MapHomeActivity">
+        <activity android:name=".activities.MapHomeActivity"
+            android:theme="@style/AppTheme.MapDetails">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.FeaturedHomeDetailActivity" />

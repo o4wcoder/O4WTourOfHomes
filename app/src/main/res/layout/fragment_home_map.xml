@@ -36,6 +36,7 @@
             style="@style/Base.TextAppearance.AppCompat.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:alpha="@string/primary_text_alpha_dark"
             android:paddingTop="16dp"
             android:paddingRight="16dp"
