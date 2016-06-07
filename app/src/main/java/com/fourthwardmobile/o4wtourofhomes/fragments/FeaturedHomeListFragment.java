@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.SharedElementCallback;
 import android.support.v4.util.Pair;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -93,10 +94,11 @@ public class FeaturedHomeListFragment extends Fragment implements Constants{
         Log.e(TAG,"onCreateView()");
         mRecyclerView = (RecyclerView)view.findViewById(R.id.home_list_recycler_view);
         //Create Grid with 2 columns
-        //mLayoutManager = new GridLayoutManager(getContext(),2);
-        mLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+       // mLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+
         //Set Layout Manager for RecyclerView
-        mRecyclerView.setLayoutManager(mLayoutManager);
+         //mRecyclerView.setLayoutManager(mLayoutManager);
+         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -123,12 +125,22 @@ public class FeaturedHomeListFragment extends Fragment implements Constants{
                 }
             }
         });
+
         //Set the adapter for the RecyclerView;
-        mRecyclerView.setAdapter(mAdapter);
+      //  if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            mRecyclerView.setAdapter(mAdapter);
+       // }
 
         Log.e(TAG,"onCreateView() Got home list count = " + mHomeList.size());
         return view;
     }
+//
+//    @Override
+//    public void onEnterAnimationComplete() {
+//        super.onEnterAnimationComplete();
+//        mRecyclerView.setAdapter(mAdapter);
+//        mRecyclerView.scheduleLayoutAnimation();
+//    }
 
 
     public RecyclerView getRecyclerView() {

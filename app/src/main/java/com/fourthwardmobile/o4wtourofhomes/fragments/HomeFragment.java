@@ -18,6 +18,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -120,6 +121,8 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
             }
         });
 
+        ParallaxScrollView scrollView = (ParallaxScrollView)view.findViewById(R.id.home_scroll_view);
+        scrollView.scrollBy(0,50);
         return view;
     }
 
