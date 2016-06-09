@@ -5,9 +5,11 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -37,6 +39,21 @@ public class TourFirebaseMessagingService extends FirebaseMessagingService imple
             Log.e(TAG,"Got tickets_avaialble key");
 
             Log.e(TAG,"Got ticket_available value = " + remoteMessage.getData().get(MSG_KEY_TICKETS_AVAILABLE));
+
+
+            String ticketValue = remoteMessage.getData().get(MSG_KEY_TICKETS_AVAILABLE);
+            Log.e(TAG, "got ticket value = " + ticketValue);
+            //Save ticket availablity to shared preferences
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean(getString(R.string.pref_tickets_available_key), Boolean.parseBoolean(ticketValue));
+
+            //Get URL for the site to purchase tickets
+            if(remoteMessage.getData().containsKey(MSG_KEY_TICKETS_URL)) {
+                String ticketURL = remoteMessage.getData().get(MSG_KEY_TICKETS_URL);
+                editor.putString(MSG_KEY_TICKETS_URL,ticketURL);
+            }
+            editor.commit();
             sendNotification(remoteMessage.getNotification().getBody());
         }
 

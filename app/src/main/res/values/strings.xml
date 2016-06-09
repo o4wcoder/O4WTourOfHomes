@@ -47,8 +47,10 @@
 
     <!-- Tickets -->
     <string name="tickets_not_available">No Tickets Available</string>
-    <string name="tickets_available">Tickets Available at the Link Below!</string>
     <string name="tickets_notified">You will be notified as soon as they become available!</string>
+    <string name="tickets_available">Tickets On Sale Now!</string>
+    <string name="tickets_follow_link">Continue to the Eventbrite site</string>
+    <string name="tickets_url_error">Error. Could not get link to tickets. Go to www.eventbrite.com and search for the O4W Tour</string>
 
 
     <!-- Error Strings -->

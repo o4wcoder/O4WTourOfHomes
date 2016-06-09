@@ -23,6 +23,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -153,14 +155,21 @@ public class FeaturedHomeDetailFragment extends Fragment implements Constants{
                         //End of transition, fade in views
                         mHomeNameTextView.animate().setDuration(TEXT_FADE_DURATION).alpha(1f);
                         mMapFAB.animate().setDuration(TEXT_FADE_DURATION).alpha(1f);
-                        Log.e(TAG,"onTransitionEnd() ");
+
+                        //Scale in FAB
+                        mMapFAB.setVisibility(View.VISIBLE);
+                        if(getActivity() != null) {
+                            Animation scaleAnimation = AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+                                    R.anim.scale_in_image);
+                            mMapFAB.startAnimation(scaleAnimation);
+                        }
                     }
 
                     @Override
                     public void onTransitionStart(Transition transition) {
                         //Start of transition, make views invisible
                         mHomeNameTextView.setAlpha(0f);
-                        mMapFAB.setAlpha(0f);
+                        mMapFAB.setVisibility(View.GONE);
                         Log.e(TAG,"onTransitionStart()");
                     }
                 });

@@ -131,7 +131,6 @@ public class FeaturedHomeListFragment extends Fragment implements Constants{
             mRecyclerView.setAdapter(mAdapter);
        // }
 
-        Log.e(TAG,"onCreateView() Got home list count = " + mHomeList.size());
         return view;
     }
 //

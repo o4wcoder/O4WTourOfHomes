@@ -39,10 +39,14 @@ public class SplashActivity extends AppCompatActivity implements Constants {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putBoolean(getString(R.string.pref_tickets_available_key), Boolean.parseBoolean(ticketValue));
+
+                //Get URL for the site to purchase tickets
+                if(getIntent().getExtras().containsKey(MSG_KEY_TICKETS_URL)) {
+                    String ticketURL = getIntent().getExtras().getString(MSG_KEY_TICKETS_URL);
+                    editor.putString(MSG_KEY_TICKETS_URL,ticketURL);
+                }
                 editor.commit();
             }
-        } else {
-            Log.e(TAG, "onCreate(): Extra in MainActivity were null. No Firebase data!!!!!!");
         }
 
 

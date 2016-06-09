@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ticket_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_ticket_icon_200"
+        android:alpha=".05"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:id="@+id/ticket_layout">
+
+        <TextView
+            android:id="@+id/ticket_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/tickets_available"
+            android:textSize="32sp"
+            android:padding="8dp"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/eventbrite_logo"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/tickets_follow_link"
+            android:padding="8dp"/>
+
+
+
+    </LinearLayout>
+
+</FrameLayout>

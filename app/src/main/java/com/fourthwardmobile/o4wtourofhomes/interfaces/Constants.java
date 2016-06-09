@@ -18,6 +18,7 @@ public interface Constants {
 
     /* MSG KEYS */
     public static final String MSG_KEY_TICKETS_AVAILABLE = "tickets_available";
+    public static final String MSG_KEY_TICKETS_URL = "tickets_url";
 
 
 
